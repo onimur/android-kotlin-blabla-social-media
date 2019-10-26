@@ -15,5 +15,15 @@ package com.onimus.blablasocialmedia.mvvm.ui.main
 import androidx.lifecycle.ViewModel
 
 class MainViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
+
+    var mainListener: MainListener? = null
+
+    fun onClickButtonLogin() {
+        mainListener?.onLoginClicked()
+    }
+
+    fun onClickButtonRegister() {
+        mainListener?.onRegisterClicked()
+
+    }
 }

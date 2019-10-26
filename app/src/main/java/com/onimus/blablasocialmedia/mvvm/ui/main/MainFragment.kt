@@ -26,22 +26,29 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
 
-class MainFragment : Fragment(), KodeinAware{
-
+class MainFragment : Fragment(), KodeinAware, MainListener {
     override val kodein by kodein()
-    private val factory: MainViewModelFactory?  = null
-    private lateinit var viewModel: MainViewModel
 
+    private val factory: MainViewModelFactory? = null
+    private lateinit var viewModel: MainViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: MainFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false)
+        val binding: MainFragmentBinding =
+            DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false)
         viewModel = ViewModelProviders.of(this, factory).get(MainViewModel::class.java)
-
+        viewModel.mainListener = this
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
         return binding.root
     }
 
+    override fun onRegisterClicked() {
+        //go to register_fragment
+    }
+
+    override fun onLoginClicked() {
+        //go to login_fragment
+    }
 }
