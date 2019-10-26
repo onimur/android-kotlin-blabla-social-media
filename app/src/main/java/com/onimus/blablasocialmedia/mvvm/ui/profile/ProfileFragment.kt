@@ -19,6 +19,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
 import com.onimus.blablasocialmedia.R
 import com.onimus.blablasocialmedia.databinding.ProfileFragmentBinding
 import org.kodein.di.KodeinAware
@@ -50,5 +51,8 @@ class ProfileFragment : Fragment(), KodeinAware, ProfileListener {
 
     override fun onUserNotLogged() {
         //go to main_fragment
+
+        val action = ProfileFragmentDirections.actionProfileFragmentToMainFragment()
+        findNavController().navigate(action)
     }
 }

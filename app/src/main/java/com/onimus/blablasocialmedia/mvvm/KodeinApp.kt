@@ -15,6 +15,7 @@ package com.onimus.blablasocialmedia.mvvm
 import android.app.Application
 import com.onimus.blablasocialmedia.mvvm.data.firebase.FirebaseManager
 import com.onimus.blablasocialmedia.mvvm.data.repository.UserRepository
+import com.onimus.blablasocialmedia.mvvm.ui.main.MainViewModelFactory
 import com.onimus.blablasocialmedia.mvvm.ui.profile.ProfileViewModelFactory
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -31,5 +32,6 @@ class KodeinApp : Application(), KodeinAware {
         bind() from singleton { FirebaseManager() }
         bind() from singleton { UserRepository(instance()) }
         bind() from provider { ProfileViewModelFactory(instance()) }
+        bind() from provider { MainViewModelFactory() }
     }
 }

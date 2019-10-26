@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Bla Bla Social Media MVVM</string>
     <string name="user_profile">User Profile</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
 </resources>
