@@ -40,6 +40,7 @@ dependencies {
     //ViewModel and LiveData
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     //Firebase
     implementation 'com.google.firebase:firebase-auth:19.1.0'
     //Material Design
