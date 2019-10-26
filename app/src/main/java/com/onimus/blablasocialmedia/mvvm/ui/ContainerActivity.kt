@@ -1,25 +1,25 @@
 /*
  *
- *  * Created by Murillo Comino on 26/10/19 13:47
+ *  * Created by Murillo Comino on 26/10/19 13:59
  *  * Github: github.com/MurilloComino
  *  * StackOverFlow: pt.stackoverflow.com/users/128573
  *  * Email: murillo_comino@hotmail.com
  *  *
  *  * Copyright (c) 2019 . All rights reserved.
- *  * Last modified 26/10/19 13:29
+ *  * Last modified 26/10/19 13:49
  *
  */
 
-package com.onimus.blablasocialmedia.mvvm
+package com.onimus.blablasocialmedia.mvvm.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.onimus.blablasocialmedia.R
+import com.onimus.blablasocialmedia.mvvm.R
 
-class MainActivity : AppCompatActivity() {
+class ContainerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_container)
     }
 }
