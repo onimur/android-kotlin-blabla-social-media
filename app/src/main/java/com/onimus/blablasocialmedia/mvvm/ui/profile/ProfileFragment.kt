@@ -51,7 +51,6 @@ class ProfileFragment : Fragment(), KodeinAware, ProfileListener {
 
     override fun onUserNotLogged() {
         //go to main_fragment
-
         val action = ProfileFragmentDirections.actionProfileFragmentToMainFragment()
         findNavController().navigate(action)
     }

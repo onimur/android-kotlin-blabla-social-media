@@ -19,6 +19,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
 
 import com.onimus.blablasocialmedia.R
 import com.onimus.blablasocialmedia.databinding.MainFragmentBinding
@@ -46,9 +47,13 @@ class MainFragment : Fragment(), KodeinAware, MainListener {
 
     override fun onRegisterClicked() {
         //go to register_fragment
+        val action = MainFragmentDirections.actionMainFragmentToRegisterFragment()
+        findNavController().navigate(action)
     }
 
     override fun onLoginClicked() {
         //go to login_fragment
+        val action = MainFragmentDirections.actionMainFragmentToLoginFragment()
+        findNavController().navigate(action)
     }
 }
