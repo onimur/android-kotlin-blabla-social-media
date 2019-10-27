@@ -18,7 +18,7 @@ class UserRepository(private val firebase: FirebaseManager) {
 
     fun login(email: String, password: String) = firebase.login(email, password)
 
-    fun register(email: String, password: String) = firebase.onRegisterClicked(email, password)
+    fun onRegisterClicked(email: String, password: String) = firebase.onRegisterClicked(email, password)
 
     fun currentUser() = firebase.currentUser()
 

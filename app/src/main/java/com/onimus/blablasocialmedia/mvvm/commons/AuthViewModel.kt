@@ -50,25 +50,28 @@ class AuthViewModel(private val repository: UserRepository) : ViewModel() {
     fun onClickButtonRegister() {
         authListener?.resetTextInputLayout()
         //validate email and password
-        checkEmailAndPassword()
+        val check = checkEmailAndPassword()
+        if(check){
 
-        authListener?.resetTextInputLayout()
-        //if is valid then show progress
-        authListener?.showProgress()
-        //calling onRegisterClicked from repository to perform the actual authentication
-        val disposable = repository.register(email!!, password!!)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                authListener?.onSuccessAuth()
-            }, {
+            authListener?.resetTextInputLayout()
+            //if is valid then show progress
+            authListener?.showProgress()
+            //calling onRegisterClicked from repository to perform the actual authentication
+            val disposable = repository.onRegisterClicked(email!!, password!!)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    authListener?.hideProgress()
+                    authListener?.onSuccessAuth()
+                }, {
 
-                authListener?.hideProgress()
-                val error = getMessageError(it)
-                //show message
-                authListener?.onFailureAuth(error)
-            })
-        disposables.add(disposable)
+                    authListener?.hideProgress()
+                    val error = getMessageError(it)
+                    //show message
+                    authListener?.onFailureAuth(error)
+                })
+            disposables.add(disposable)
+        }
     }
 
     fun onClickTextViewLogin() {
@@ -76,24 +79,25 @@ class AuthViewModel(private val repository: UserRepository) : ViewModel() {
         authListener?.onNavigateToLogin()
     }
 
-    private fun checkEmailAndPassword() {
+    private fun checkEmailAndPassword(): Boolean {
         when {
             email.isNullOrBlank() -> {
                 authListener?.inEmailValidationError(R.string.field_empty)
-                return
+                return false
             }
             !email!!.patternMatch(AppConstants.Pattern.EMAIL) -> {
                 authListener?.inEmailValidationError(R.string.error_invalid_email_format)
-                return
+                return false
             }
             password.isNullOrBlank() -> {
                 authListener?.inPasswordValidationError(R.string.field_empty)
-                return
+                return false
             }
             !password!!.patternMatch(AppConstants.Pattern.PASSWORD) -> {
                 authListener?.inPasswordValidationError(R.string.error_password_weak)
-                return
+                return false
             }
+            else -> return true
         }
     }
 

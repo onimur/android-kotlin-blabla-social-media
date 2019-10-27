@@ -91,7 +91,7 @@
             android:id="@+id/btnRegister"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:onClick="@{viewmodel::onClickButtonRegister}"
+            android:onClick="@{() -> viewmodel.onClickButtonRegister()}"
             android:text="@string/register"
             app:layout_constraintBottom_toTopOf="@+id/tvLogin"
             app:layout_constraintEnd_toStartOf="@+id/guideline3"
@@ -103,7 +103,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/already_have_account_login"
-            android:onClick="@{viewmodel::onClickTextViewLogin}"
+            android:onClick="@{() -> viewmodel.onClickTextViewLogin()}"
             app:layout_constraintBottom_toTopOf="@+id/guideline4"
             app:layout_constraintEnd_toStartOf="@+id/guideline3"
             app:layout_constraintStart_toStartOf="@+id/guideline2" />

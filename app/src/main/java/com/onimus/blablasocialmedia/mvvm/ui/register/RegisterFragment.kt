@@ -29,6 +29,8 @@ import com.onimus.blablasocialmedia.mvvm.commons.AuthListener
 import com.onimus.blablasocialmedia.mvvm.commons.AuthViewModel
 import com.onimus.blablasocialmedia.mvvm.commons.AuthViewModelFactory
 import com.onimus.blablasocialmedia.mvvm.extensions.toast
+import com.onimus.blablasocialmedia.mvvm.utils.lockOrientation
+import com.onimus.blablasocialmedia.mvvm.utils.unlockOrientation
 import kotlinx.android.synthetic.main.register_fragment.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
@@ -61,7 +63,7 @@ class RegisterFragment : Fragment(), KodeinAware, AuthListener {
     }
 
     override fun inPasswordValidationError(resId: Int) {
-        sendActionToTextInputLayout(getString(resId), tiEmail)
+        sendActionToTextInputLayout(getString(resId), tiPass)
     }
 
     override fun onSuccessAuth() {
@@ -84,6 +86,8 @@ class RegisterFragment : Fragment(), KodeinAware, AuthListener {
         btnRegister.isEnabled = false
         etEmail.isEnabled = false
         etPass.isEnabled = false
+
+        lockOrientation(activity!!)
     }
 
     override fun hideProgress() {
@@ -91,6 +95,7 @@ class RegisterFragment : Fragment(), KodeinAware, AuthListener {
         btnRegister.isEnabled = true
         etEmail.isEnabled = true
         etPass.isEnabled = true
+        unlockOrientation(activity!!)
     }
 
     override fun resetTextInputLayout() {
