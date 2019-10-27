@@ -4,4 +4,31 @@
     <string name="register">Register</string>
     <string name="login">Login</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="create_account">Create Account</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="validating">Validating…</string>
+    <string name="already_have_account_login">Already have account? Login</string>
+    <string name="field_empty">Field can\'t be empty</string>
+    <string name="error_invalid_email_format">Invalid email format</string>
+    <string name="error_password_weak">Password must contain 6 alphanumeric characters, with at least one number, one lowercase character, and one uppercase character.</string>
+    <!--Error Firebase -->
+    <string name="error_email_already_use">Email is already in use</string>
+    <string name="error_credentials_already_use">Credentials are already in use.</string>
+    <string name="error_unknown">Unknown error</string>
+    <string name="error_invalid_custom_token">The custom token format is incorrect. Please check the documentation.</string>
+    <string name="error_custom_token_mismatch">The custom token corresponds to a different audience.</string>
+    <string name="error_invalid_credential">The supplied auth credential is malformed or has expired.</string>
+    <string name="error_wrong_password">The password is invalid or the user does not have a password.</string>
+    <string name="error_user_mismatch">The supplied credentials do not correspond to the previously signed in user.</string>
+    <string name="error_requires_recent_login">This operation is sensitive and requires recent authentication. Log in again before retrying this request.</string>
+    <string name="error_account_exists_with_different_credential">An account already exists with the same email address but different sign-in credentials. Sign in using a provider associated with this email address.</string>
+    <string name="error_user_disabled">The user account has been disabled by an administrator.</string>
+    <string name="error_user_token_expired">The user\'s credential is no longer valid. The user must sign in again.</string>
+    <string name="error_user_not_found">There is no user record corresponding to this identifier. The user may have been deleted.</string>
+    <string name="error_invalid_user_token">The user\'s credential is no longer valid. The user must sign in again.</string>
+    <string name="error_operation_not_allowed">This operation is not allowed. You must enable this service in the console.</string>
+    <string name="registered_email">Registered email</string>
+    <string name="authentication_failed">Authentication failed</string>
+
 </resources>
