@@ -12,17 +12,11 @@
 
 package com.onimus.blablasocialmedia.mvvm.ui.register
 
-
-import android.app.AlertDialog
-import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavDirections
@@ -34,8 +28,7 @@ import com.onimus.blablasocialmedia.mvvm.commons.AuthListener
 import com.onimus.blablasocialmedia.mvvm.commons.AuthViewModel
 import com.onimus.blablasocialmedia.mvvm.commons.AuthViewModelFactory
 import com.onimus.blablasocialmedia.mvvm.extensions.toast
-import com.onimus.blablasocialmedia.mvvm.utils.lockOrientation
-import com.onimus.blablasocialmedia.mvvm.utils.unlockOrientation
+import com.onimus.blablasocialmedia.mvvm.utils.ProgressDialog
 import kotlinx.android.synthetic.main.register_fragment.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
@@ -45,7 +38,7 @@ class RegisterFragment : Fragment(), KodeinAware, AuthListener {
 
     override val kodein by kodein()
 
-    private val progressBar: Dialog by lazy { Dialog(context!!) }
+    private val progressBar: ProgressDialog by lazy { ProgressDialog(context!!) }
 
     private val factory: AuthViewModelFactory by instance()
 
@@ -70,10 +63,7 @@ class RegisterFragment : Fragment(), KodeinAware, AuthListener {
     }
 
     private fun initVariables() {
-        progressBar.setCancelable(false)
-        val view = layoutInflater.inflate(R.layout.progressbar_dialog, null)
-        progressBar.setContentView(view)
-        progressBar.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        progressBar.create()
     }
 
     private fun startAction() {
@@ -81,7 +71,6 @@ class RegisterFragment : Fragment(), KodeinAware, AuthListener {
         if (viewModel.getProgressBarStatus().value!! && !progressBar.isShowing) {
             progressBar.show()
         }
-
     }
 
     override fun inEmailValidationError(resId: Int) {
