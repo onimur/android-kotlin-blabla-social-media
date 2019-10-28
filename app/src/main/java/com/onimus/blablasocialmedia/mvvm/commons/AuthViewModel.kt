@@ -70,7 +70,7 @@ class AuthViewModel(private val repository: UserRepository) : ViewModel() {
         if (check) {
             authListener?.resetTextInputLayout()
             //if is valid then show progress
-            //authListener?.showProgress()
+            authListener?.showProgress()
             //calling onRegisterClicked from repository to perform the actual authentication
             val disposable = repository.onRegisterClicked(email!!, password!!)
                 .subscribeOn(Schedulers.io())

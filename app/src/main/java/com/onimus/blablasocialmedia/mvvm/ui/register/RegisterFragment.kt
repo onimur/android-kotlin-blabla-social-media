@@ -70,9 +70,9 @@ class RegisterFragment : Fragment(), KodeinAware, AuthListener {
     }
 
     private fun initVariables() {
-        progressBar.requestWindowFeature(Window.FEATURE_NO_TITLE)
         progressBar.setCancelable(false)
-        progressBar.setContentView(R.layout.progressbar_dialog)
+        val view = layoutInflater.inflate(R.layout.progressbar_dialog, null)
+        progressBar.setContentView(view)
         progressBar.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
@@ -111,24 +111,11 @@ class RegisterFragment : Fragment(), KodeinAware, AuthListener {
         progressBar.show()
         //Save dialog state
         viewModel.setProgressBarStatus(true)
-/*
-        llProgress.visibility = View.VISIBLE
-        btnRegister.isEnabled = false
-        etEmail.isEnabled = false
-        etPass.isEnabled = false
-*/
-
-        //   lockOrientation(activity!!)
     }
 
     override fun hideProgress() {
         progressBar.dismiss()
         viewModel.setProgressBarStatus(false)
-/*        llProgress.visibility = View.GONE
-        btnRegister.isEnabled = true
-        etEmail.isEnabled = true
-        etPass.isEnabled = true*/
-        //  unlockOrientation(activity!!)
     }
 
     override fun resetTextInputLayout() {
