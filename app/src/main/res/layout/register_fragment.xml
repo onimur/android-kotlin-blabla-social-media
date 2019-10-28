@@ -136,46 +136,5 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.03" />
 
-        <LinearLayout
-            android:id="@+id/llProgress"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorDarkTransparency"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/round_progressbar"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ProgressBar
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:paddingTop="15dp"
-                    android:text="@string/validating"
-                    android:textColor="@color/colorDark"
-                    android:textSize="16sp" />
-            </LinearLayout>
-        </LinearLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

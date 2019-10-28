@@ -13,11 +13,16 @@
 package com.onimus.blablasocialmedia.mvvm.ui.register
 
 
+import android.app.AlertDialog
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavDirections
@@ -40,6 +45,8 @@ class RegisterFragment : Fragment(), KodeinAware, AuthListener {
 
     override val kodein by kodein()
 
+    private val progressBar: Dialog by lazy { Dialog(context!!) }
+
     private val factory: AuthViewModelFactory by instance()
 
     private lateinit var viewModel: AuthViewModel
@@ -55,7 +62,26 @@ class RegisterFragment : Fragment(), KodeinAware, AuthListener {
         viewModel.authListener = this
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
+        //
+        initVariables()
+        startAction()
+        //
         return binding.root
+    }
+
+    private fun initVariables() {
+        progressBar.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        progressBar.setCancelable(false)
+        progressBar.setContentView(R.layout.progressbar_dialog)
+        progressBar.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    }
+
+    private fun startAction() {
+        //If the view is destroyed while the dialog is visible, its state is saved and retrieved here.
+        if (viewModel.getProgressBarStatus().value!! && !progressBar.isShowing) {
+            progressBar.show()
+        }
+
     }
 
     override fun inEmailValidationError(resId: Int) {
@@ -82,20 +108,27 @@ class RegisterFragment : Fragment(), KodeinAware, AuthListener {
     }
 
     override fun showProgress() {
+        progressBar.show()
+        //Save dialog state
+        viewModel.setProgressBarStatus(true)
+/*
         llProgress.visibility = View.VISIBLE
         btnRegister.isEnabled = false
         etEmail.isEnabled = false
         etPass.isEnabled = false
+*/
 
-        lockOrientation(activity!!)
+        //   lockOrientation(activity!!)
     }
 
     override fun hideProgress() {
-        llProgress.visibility = View.GONE
+        progressBar.dismiss()
+        viewModel.setProgressBarStatus(false)
+/*        llProgress.visibility = View.GONE
         btnRegister.isEnabled = true
         etEmail.isEnabled = true
-        etPass.isEnabled = true
-        unlockOrientation(activity!!)
+        etPass.isEnabled = true*/
+        //  unlockOrientation(activity!!)
     }
 
     override fun resetTextInputLayout() {
@@ -110,6 +143,5 @@ class RegisterFragment : Fragment(), KodeinAware, AuthListener {
             it.requestFocus()
             it.isFocusable = true
         }
-
     }
 }

@@ -12,9 +12,9 @@
 
 package com.onimus.blablasocialmedia.mvvm.commons
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuthException
-import com.onimus.blablasocialmedia.R
 import com.onimus.blablasocialmedia.mvvm.data.repository.UserRepository
 import com.onimus.blablasocialmedia.mvvm.extensions.patternMatch
 import com.onimus.blablasocialmedia.mvvm.utils.AppConstants
@@ -37,6 +37,9 @@ import com.onimus.blablasocialmedia.mvvm.utils.AppConstants.ErrorFirebaseAuth.ER
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import androidx.lifecycle.MutableLiveData
+import com.onimus.blablasocialmedia.R
+
 
 class AuthViewModel(private val repository: UserRepository) : ViewModel() {
 
@@ -47,15 +50,27 @@ class AuthViewModel(private val repository: UserRepository) : ViewModel() {
     //disposable to dispose the Completable
     private val disposables = CompositeDisposable()
 
+    //create livedata variable to save the progressbar(dialog) state
+    private val progressBarActive = MutableLiveData<Boolean>(false)
+
+    // get status from viewmodel
+    fun getProgressBarStatus(): LiveData<Boolean> {
+        return progressBarActive
+    }
+
+    // save status to viewmodel
+    fun setProgressBarStatus(status: Boolean) {
+        progressBarActive.postValue(status)
+    }
+
     fun onClickButtonRegister() {
         authListener?.resetTextInputLayout()
         //validate email and password
         val check = checkEmailAndPassword()
-        if(check){
-
+        if (check) {
             authListener?.resetTextInputLayout()
             //if is valid then show progress
-            authListener?.showProgress()
+            //authListener?.showProgress()
             //calling onRegisterClicked from repository to perform the actual authentication
             val disposable = repository.onRegisterClicked(email!!, password!!)
                 .subscribeOn(Schedulers.io())
