@@ -10,13 +10,24 @@
  *
  */
 
-package com.onimus.blablasocialmedia.mvvm.ui.main
+package com.onimus.blablasocialmedia.mvvm.ui.auth.main
 
 import androidx.lifecycle.ViewModel
+import com.onimus.blablasocialmedia.mvvm.data.repository.UserRepository
 
-class MainViewModel : ViewModel() {
+class MainViewModel (private val repository: UserRepository) : ViewModel() {
 
     var mainListener: MainListener? = null
+
+    private val user by lazy {
+        repository.currentUser()
+    }
+
+    fun checkUserStatus() {
+        if (user != null) {
+            mainListener?.onUserLogged()
+        }
+    }
 
     fun onClickButtonLogin() {
         mainListener?.onLoginClicked()

@@ -10,7 +10,7 @@
  *
  */
 
-package com.onimus.blablasocialmedia.mvvm.ui.main
+package com.onimus.blablasocialmedia.mvvm.ui.auth.main
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -30,8 +30,10 @@ import org.kodein.di.generic.instance
 class MainFragment : Fragment(), KodeinAware, MainListener {
     override val kodein by kodein()
 
-    private val factory: MainViewModelFactory? = null
+    private val factory: MainViewModelFactory by instance()
+
     private lateinit var viewModel: MainViewModel
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,6 +47,11 @@ class MainFragment : Fragment(), KodeinAware, MainListener {
         return binding.root
     }
 
+    override fun onStart() {
+        viewModel.checkUserStatus()
+        super.onStart()
+    }
+
     override fun onRegisterClicked() {
         //go to register_fragment
         val action = MainFragmentDirections.actionMainFragmentToRegisterFragment()
@@ -54,6 +61,12 @@ class MainFragment : Fragment(), KodeinAware, MainListener {
     override fun onLoginClicked() {
         //go to login_fragment
         val action = MainFragmentDirections.actionMainFragmentToLoginFragment()
+        findNavController().navigate(action)
+    }
+
+    override fun onUserLogged() {
+        //go to profile_fragment
+        val action = MainFragmentDirections.actionMainFragmentToProfileFragment()
         findNavController().navigate(action)
     }
 }

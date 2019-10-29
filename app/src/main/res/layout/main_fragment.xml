@@ -17,14 +17,14 @@
 
         <variable
             name="viewmodel"
-            type="com.onimus.blablasocialmedia.mvvm.ui.main.MainViewModel" />
+            type="com.onimus.blablasocialmedia.mvvm.ui.auth.main.MainViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="20dp"
-        tools:context=".mvvm.ui.main.MainFragment">
+        tools:context=".mvvm.ui.auth.main.MainFragment">
 
         <Button
             android:id="@+id/btnRegister"

@@ -12,6 +12,4 @@
 
 package com.onimus.blablasocialmedia.mvvm.ui.profile
 
-interface ProfileListener {
-    fun onUserNotLogged()
-}
+interface ProfileListener

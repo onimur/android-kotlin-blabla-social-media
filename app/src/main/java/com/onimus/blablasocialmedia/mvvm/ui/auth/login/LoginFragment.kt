@@ -10,7 +10,7 @@
  *
  */
 
-package com.onimus.blablasocialmedia.mvvm.ui.login
+package com.onimus.blablasocialmedia.mvvm.ui.auth.login
 
 
 import android.os.Bundle

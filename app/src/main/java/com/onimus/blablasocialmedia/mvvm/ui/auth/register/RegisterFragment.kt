@@ -10,7 +10,7 @@
  *
  */
 
-package com.onimus.blablasocialmedia.mvvm.ui.register
+package com.onimus.blablasocialmedia.mvvm.ui.auth.register
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

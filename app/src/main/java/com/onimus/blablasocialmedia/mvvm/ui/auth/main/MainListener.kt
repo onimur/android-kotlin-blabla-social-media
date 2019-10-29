@@ -10,10 +10,11 @@
  *
  */
 
-package com.onimus.blablasocialmedia.mvvm.ui.main
+package com.onimus.blablasocialmedia.mvvm.ui.auth.main
 
 interface MainListener {
 
     fun onRegisterClicked()
     fun onLoginClicked()
+    fun onUserLogged()
 }

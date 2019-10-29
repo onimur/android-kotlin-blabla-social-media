@@ -43,15 +43,4 @@ class ProfileFragment : Fragment(), KodeinAware, ProfileListener {
         binding.lifecycleOwner = this
         return binding.root
     }
-
-    override fun onStart() {
-        viewModel.checkUserStatus()
-        super.onStart()
-    }
-
-    override fun onUserNotLogged() {
-        //go to main_fragment
-        val action = ProfileFragmentDirections.actionProfileFragmentToMainFragment()
-        findNavController().navigate(action)
-    }
 }
