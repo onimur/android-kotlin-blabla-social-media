@@ -89,9 +89,40 @@ class AuthViewModel(private val repository: UserRepository) : ViewModel() {
         }
     }
 
+    fun onClickButtonLogin() {
+        authListener?.resetTextInputLayout()
+        //validate email and password
+        val check = checkEmailAndPassword()
+        if (check) {
+            authListener?.resetTextInputLayout()
+            //if is valid then show progress
+            authListener?.showProgress()
+            //calling onLoginClicked from repository to perform the actual authentication
+            val disposable = repository.onLoginClicked(email!!, password!!)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    authListener?.hideProgress()
+                    authListener?.onSuccessAuth()
+                }, {
+
+                    authListener?.hideProgress()
+                    val error = getMessageError(it)
+                    //show message
+                    authListener?.onFailureAuth(error)
+                })
+            disposables.add(disposable)
+        }
+    }
+
     fun onClickTextViewLogin() {
         //go to login_fragment
-        authListener?.onNavigateToLogin()
+        authListener?.onNavigate()
+    }
+
+    fun onClickTextViewRegister() {
+        //go to register_fragment
+        authListener?.onNavigate()
     }
 
     private fun checkEmailAndPassword(): Boolean {

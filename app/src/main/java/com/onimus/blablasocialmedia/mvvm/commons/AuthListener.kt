@@ -14,8 +14,8 @@ package com.onimus.blablasocialmedia.mvvm.commons
 
 interface AuthListener {
     fun onSuccessAuth()
-    fun onFailureAuth(redId: Int)
-    fun onNavigateToLogin()
+    fun onFailureAuth(resId: Int)
+    fun onNavigate()
     fun inEmailValidationError(resId: Int)
     fun inPasswordValidationError(resId: Int)
     //

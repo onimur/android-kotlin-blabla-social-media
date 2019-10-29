@@ -23,13 +23,19 @@ class FirebaseManager {
     }
 
 
-    fun login(email: String, password: String) = Completable.create { emitter ->
-        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-            if (!emitter.isDisposed) {
-                if (it.isSuccessful)
+    fun onLoginClicked(email: String, password: String) = Completable.create { emitter ->
+        if (!emitter.isDisposed) {
+            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    Log.d(
+                        AppConstants.Tag.LOG_D,
+                        "UserWithEmail:success - ${it.result.toString()}"
+                    )
                     emitter.onComplete()
-                else
-                    emitter.onError(it.exception!!)
+                }
+            }.addOnFailureListener {
+                Log.w(AppConstants.Tag.LOG_W, "UserWithEmail:failure - ${it.message}", it.cause)
+                emitter.onError(it)
             }
         }
     }

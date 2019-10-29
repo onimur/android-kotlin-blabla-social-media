@@ -21,7 +21,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.textfield.TextInputLayout
 import com.onimus.blablasocialmedia.R
 import com.onimus.blablasocialmedia.databinding.RegisterFragmentBinding
 import com.onimus.blablasocialmedia.mvvm.commons.AuthListener
@@ -29,6 +28,7 @@ import com.onimus.blablasocialmedia.mvvm.commons.AuthViewModel
 import com.onimus.blablasocialmedia.mvvm.commons.AuthViewModelFactory
 import com.onimus.blablasocialmedia.mvvm.extensions.toast
 import com.onimus.blablasocialmedia.mvvm.utils.ProgressDialog
+import com.onimus.blablasocialmedia.mvvm.utils.sendActionToTextInputLayout
 import kotlinx.android.synthetic.main.register_fragment.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
@@ -87,11 +87,11 @@ class RegisterFragment : Fragment(), KodeinAware, AuthListener {
         findNavController().navigate(actionNav)
     }
 
-    override fun onFailureAuth(redId: Int) {
-        context?.toast("${getString(R.string.authentication_failed)}: ${getString(redId)}")
+    override fun onFailureAuth(resId: Int) {
+        context?.toast("${getString(R.string.authentication_failed)}: ${getString(resId)}")
     }
 
-    override fun onNavigateToLogin() {
+    override fun onNavigate() {
         actionNav = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment()
         findNavController().navigate(actionNav)
     }
@@ -113,11 +113,5 @@ class RegisterFragment : Fragment(), KodeinAware, AuthListener {
     }
 
     ///////////////////////////////////////////////////////////////////////////////////
-    private fun sendActionToTextInputLayout(message: String, textInputLayout: TextInputLayout) {
-        textInputLayout.let {
-            it.error = message
-            it.requestFocus()
-            it.isFocusable = true
-        }
-    }
+
 }

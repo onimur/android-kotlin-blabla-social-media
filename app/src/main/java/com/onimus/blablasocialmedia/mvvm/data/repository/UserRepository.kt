@@ -16,7 +16,7 @@ import com.onimus.blablasocialmedia.mvvm.data.firebase.FirebaseManager
 
 class UserRepository(private val firebase: FirebaseManager) {
 
-    fun login(email: String, password: String) = firebase.login(email, password)
+    fun onLoginClicked(email: String, password: String) = firebase.onLoginClicked(email, password)
 
     fun onRegisterClicked(email: String, password: String) = firebase.onRegisterClicked(email, password)
 

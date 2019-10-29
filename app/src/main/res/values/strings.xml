@@ -30,5 +30,6 @@
     <string name="error_operation_not_allowed">This operation is not allowed. You must enable this service in the console.</string>
     <string name="registered_email">Registered email</string>
     <string name="authentication_failed">Authentication failed</string>
+    <string name="not_have_account_register">Not have account? Register</string>
 
 </resources>
