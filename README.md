@@ -6,9 +6,15 @@ This project aims to create an open-source social media application.
 ## Main Features
 * Architecture: MVVM (Model-View-ViewModel)
 
-* Testing: Non-instrumented (unit and integration testing) and instrumented (integration and user interface testing)
+* Programming Language: [Kotlin](https://kotlinlang.org)
 
-* Implementation: Google Firebase (user credentials, remote notifications, database ...)
+* Testing: Non-instrumented (unit and integration testing) and instrumented (integration and user interface testing) using [Mockito](https://site.mockito.org) and [MockK](https://mockk.io)
+
+* Navigation: [Android Jetpack's Navigation](https://developer.android.com/guide/navigation) 
+
+* Dependency Injection: [Kodein](https://kodein.org/Kodein-DI/)
+
+* User Authenticator: [Firebase Authentication](https://firebase.google.com/docs/auth/android/password-auth)
 
 ## Getting Started
 ### Using Git Bash
