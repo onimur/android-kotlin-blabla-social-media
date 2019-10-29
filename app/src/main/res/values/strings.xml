@@ -29,6 +29,7 @@
     <string name="error_invalid_user_token">The user\'s credential is no longer valid. The user must sign in again.</string>
     <string name="error_operation_not_allowed">This operation is not allowed. You must enable this service in the console.</string>
     <string name="registered_email">Registered email</string>
+    <string name="login_email">Login email</string>
     <string name="authentication_failed">Authentication failed</string>
     <string name="not_have_account_register">Not have account? Register</string>
 

@@ -82,7 +82,7 @@ class LoginFragment : Fragment(), KodeinAware, AuthListener {
     }
 
     override fun onSuccessAuth() {
-        context?.toast("${getString(R.string.registered_email)}: ${viewModel.email}")
+        context?.toast("${getString(R.string.login_email)}: ${viewModel.email}")
         actionNav = LoginFragmentDirections.actionLoginFragmentToProfileFragment()
         findNavController().navigate(actionNav)
     }
