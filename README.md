@@ -4,7 +4,7 @@ This project aims to create an open-source social media application.
 
 
 ## Main Features
-* Architecture: MVP (model-view-presenter)
+* Architecture: MVVM (Model-View-ViewModel)
 
 * Testing: Non-instrumented (unit and integration testing) and instrumented (integration and user interface testing)
 
