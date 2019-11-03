@@ -19,6 +19,11 @@ object AppConstants {
         const val LOG_D = "Onimus/check"
     }
 
+    object Button {
+        const val REGISTER = 1
+        const val LOGIN = 2
+    }
+
     object ErrorFirebaseAuth {
         const val ERROR_EMAIL_ALREADY_IN_USE = "ERROR_EMAIL_ALREADY_IN_USE"
         const val ERROR_INVALID_EMAIL = "ERROR_INVALID_EMAIL"
