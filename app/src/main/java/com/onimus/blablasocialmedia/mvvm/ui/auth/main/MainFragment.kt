@@ -12,13 +12,13 @@
 
 package com.onimus.blablasocialmedia.mvvm.ui.auth.main
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 
 import com.onimus.blablasocialmedia.R
@@ -40,7 +40,7 @@ class MainFragment : Fragment(), KodeinAware, MainListener {
     ): View? {
         val binding: MainFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false)
-        viewModel = ViewModelProviders.of(this, factory).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
         viewModel.mainListener = this
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
