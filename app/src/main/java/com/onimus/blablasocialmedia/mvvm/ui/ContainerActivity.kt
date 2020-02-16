@@ -12,8 +12,8 @@
 
 package com.onimus.blablasocialmedia.mvvm.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.onimus.blablasocialmedia.R
 
 class ContainerActivity : AppCompatActivity() {

@@ -13,15 +13,15 @@
 package com.onimus.blablasocialmedia.mvvm.commons
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.onimus.blablasocialmedia.mvvm.data.repository.UserRepository
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
-import androidx.lifecycle.MutableLiveData
 import com.onimus.blablasocialmedia.mvvm.utils.AppConstants
 import com.onimus.blablasocialmedia.mvvm.utils.HandleErrors
 import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
 
 class AuthViewModel(

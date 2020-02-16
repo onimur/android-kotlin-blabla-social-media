@@ -15,9 +15,8 @@ package com.onimus.blablasocialmedia.mvvm.utils
 import com.google.firebase.auth.*
 import com.onimus.blablasocialmedia.R
 import org.hamcrest.core.Is.`is`
+import org.junit.Assert.assertThat
 import org.junit.Before
-
-import org.junit.Assert.*
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyString
 

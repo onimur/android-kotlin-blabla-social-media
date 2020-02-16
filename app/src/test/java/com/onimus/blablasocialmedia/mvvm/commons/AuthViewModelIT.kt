@@ -27,9 +27,12 @@ import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
-import org.junit.*
-
-import org.junit.Assert.*
+import org.junit.After
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 
 
 class AuthViewModelIT {
