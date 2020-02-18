@@ -37,6 +37,12 @@ class FirebaseManager {
         }
     }
 
+    fun onForgotPasswordClicked(email: String) = Completable.create { emitter ->
+        if (!emitter.isDisposed) {
+            resetPassword(firebaseAuth.sendPasswordResetEmail(email), emitter)
+        }
+    }
+
     fun logout() = firebaseAuth.signOut()
 
     fun currentUser() = firebaseAuth.currentUser
@@ -51,6 +57,26 @@ class FirebaseManager {
                 Log.d(
                     AppConstants.Tag.LOG_D,
                     "UserWithEmail:success - ${it.result.toString()}"
+                )
+                emitter.onComplete()
+            }
+        }.addOnFailureListener {
+            Log.w(AppConstants.Tag.LOG_W, "UserWithEmail:failure - ${it.message}", it.cause)
+            emitter.onError(it)
+        }
+
+    }
+
+    private fun resetPassword(
+        nameTask: Task<Void>,
+        emitter: CompletableEmitter
+    ) {
+
+        nameTask.addOnCompleteListener {
+            if (it.isSuccessful) {
+                Log.d(
+                    AppConstants.Tag.LOG_D,
+                    "Email sent - ${it.result.toString()}"
                 )
                 emitter.onComplete()
             }
