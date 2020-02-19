@@ -20,7 +20,7 @@ class UserRepository(private val firebase: FirebaseManager) {
 
     fun onLoginClicked(email: String, password: String) = firebase.onLoginClicked(email, password)
 
-    fun onResetPasswordClicked(email: String) = firebase.onForgotPasswordClicked(email)
+    fun onResetPasswordClicked(email: String) = firebase.onResetPasswordClicked(email)
 
     fun currentUser() = firebase.currentUser()
 

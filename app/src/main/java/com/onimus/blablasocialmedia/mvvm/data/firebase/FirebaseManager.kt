@@ -37,7 +37,7 @@ class FirebaseManager {
         }
     }
 
-    fun onForgotPasswordClicked(email: String) = Completable.create { emitter ->
+    fun onResetPasswordClicked(email: String) = Completable.create { emitter ->
         if (!emitter.isDisposed) {
             resetPassword(firebaseAuth.sendPasswordResetEmail(email), emitter)
         }
