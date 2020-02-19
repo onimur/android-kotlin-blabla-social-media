@@ -31,8 +31,7 @@
             tools:layout="@layout/main_fragment">
             <action
                 android:id="@+id/action_mainFragment_to_profileFragment"
-                app:destination="@id/profileFragment"
-                app:popUpTo="@id/nav_auth" />
+                app:destination="@id/profileFragment" />
             <action
                 android:id="@+id/action_mainFragment_to_registerFragment"
                 app:destination="@id/registerFragment" />
@@ -50,8 +49,7 @@
                 app:destination="@id/loginFragment" />
             <action
                 android:id="@+id/action_registerFragment_to_profileFragment"
-                app:destination="@id/profileFragment"
-                app:popUpTo="@id/nav_auth" />
+                app:destination="@id/profileFragment" />
         </fragment>
         <fragment
             android:id="@+id/loginFragment"
@@ -63,13 +61,11 @@
                 app:destination="@id/registerFragment" />
             <action
                 android:id="@+id/action_loginFragment_to_profileFragment"
-                app:destination="@id/profileFragment"
-                app:popUpTo="@id/nav_auth" />
+                app:destination="@id/profileFragment" />
 
             <action
                 android:id="@+id/action_loginFragment_to_resetFragment"
-                app:destination="@id/nav_reset_pass"
-                app:popUpTo="@id/nav_auth" />
+                app:destination="@id/nav_reset_pass" />
         </fragment>
 
     </navigation>
