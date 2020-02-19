@@ -68,18 +68,26 @@
 
             <action
                 android:id="@+id/action_loginFragment_to_resetFragment"
-                app:destination="@id/resetPasswordFragment"
+                app:destination="@id/nav_reset_pass"
                 app:popUpTo="@id/nav_auth" />
         </fragment>
 
     </navigation>
-    <fragment
-        android:id="@+id/resetPasswordFragment"
-        android:name="com.onimus.blablasocialmedia.mvvm.ui.resetpass.reset.ResetPasswordFragment"
-        android:label="ResetPasswordFragment" />
-    <fragment
-        android:id="@+id/successSendingEmailFragment"
-        android:name="com.onimus.blablasocialmedia.mvvm.ui.resetpass.successsending.SuccessSendingEmailFragment"
-        android:label="fragment_sucess_sending_email"
-        tools:layout="@layout/fragment_success_sending_email" />
+    <navigation
+        android:id="@+id/nav_reset_pass"
+        app:startDestination="@id/resetPasswordFragment" >
+        <fragment
+            android:id="@+id/resetPasswordFragment"
+            android:name="com.onimus.blablasocialmedia.mvvm.ui.resetpass.reset.ResetPasswordFragment"
+            android:label="ResetPasswordFragment">
+            <action
+                android:id="@+id/action_resetPasswordFragment_to_successSendingEmailFragment"
+                app:destination="@id/successSendingEmailFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/successSendingEmailFragment"
+            android:name="com.onimus.blablasocialmedia.mvvm.ui.resetpass.successsending.SuccessSendingEmailFragment"
+            android:label="fragment_sucess_sending_email"
+            tools:layout="@layout/fragment_success_sending_email" />
+    </navigation>
 </navigation>
