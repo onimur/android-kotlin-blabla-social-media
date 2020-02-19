@@ -75,17 +75,17 @@ class AuthViewModel(
     }
 
     fun onClickTextViewLogin() {
-        //go to login_fragment
+        //go to fragment_login
         authListener?.onNavigate()
     }
 
     fun onClickTextViewRegister() {
-        //go to register_fragment
+        //go to fragment_register
         authListener?.onClickTextViewRegister()
     }
 
     fun onClickTextViewForgotPassword() {
-        //go to reset_password_fragment
+        //go to fragment_reset_password
         authListener?.onClickTextViewForgotPassword()
     }
 

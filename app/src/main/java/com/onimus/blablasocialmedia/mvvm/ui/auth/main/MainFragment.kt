@@ -21,7 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.onimus.blablasocialmedia.R
-import com.onimus.blablasocialmedia.databinding.MainFragmentBinding
+import com.onimus.blablasocialmedia.databinding.FragmentMainBinding
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
@@ -37,8 +37,8 @@ class MainFragment : Fragment(), KodeinAware, MainListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: MainFragmentBinding =
-            DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false)
+        val binding: FragmentMainBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
         viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
         viewModel.mainListener = this
         binding.viewmodel = viewModel
@@ -52,19 +52,19 @@ class MainFragment : Fragment(), KodeinAware, MainListener {
     }
 
     override fun onRegisterClicked() {
-        //go to register_fragment
+        //go to fragment_register
         val action = MainFragmentDirections.actionMainFragmentToRegisterFragment()
         findNavController().navigate(action)
     }
 
     override fun onLoginClicked() {
-        //go to login_fragment
+        //go to fragment_login
         val action = MainFragmentDirections.actionMainFragmentToLoginFragment()
         findNavController().navigate(action)
     }
 
     override fun onUserLogged() {
-        //go to profile_fragment
+        //go to fragment_profile
         val action = MainFragmentDirections.actionMainFragmentToProfileFragment()
         findNavController().navigate(action)
     }

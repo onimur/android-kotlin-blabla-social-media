@@ -22,14 +22,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.onimus.blablasocialmedia.R
-import com.onimus.blablasocialmedia.databinding.RegisterFragmentBinding
+import com.onimus.blablasocialmedia.databinding.FragmentRegisterBinding
 import com.onimus.blablasocialmedia.mvvm.commons.AuthListener
 import com.onimus.blablasocialmedia.mvvm.commons.AuthViewModel
 import com.onimus.blablasocialmedia.mvvm.commons.AuthViewModelFactory
 import com.onimus.blablasocialmedia.mvvm.extensions.toast
 import com.onimus.blablasocialmedia.mvvm.utils.ProgressDialog
 import com.onimus.blablasocialmedia.mvvm.utils.sendActionToTextInputLayout
-import kotlinx.android.synthetic.main.register_fragment.*
+import kotlinx.android.synthetic.main.fragment_register.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
@@ -49,8 +49,8 @@ class RegisterFragment : Fragment(), KodeinAware, AuthListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: RegisterFragmentBinding =
-            DataBindingUtil.inflate(inflater, R.layout.register_fragment, container, false)
+        val binding: FragmentRegisterBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_register, container, false)
         viewModel = ViewModelProvider(this, factory).get(AuthViewModel::class.java)
         viewModel.authListener = this
         binding.viewmodel = viewModel

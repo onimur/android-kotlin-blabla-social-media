@@ -10,14 +10,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.onimus.blablasocialmedia.R
-import com.onimus.blablasocialmedia.databinding.ResetPasswordFragmentBinding
+import com.onimus.blablasocialmedia.databinding.FragmentResetPasswordBinding
 import com.onimus.blablasocialmedia.mvvm.commons.AuthListener
 import com.onimus.blablasocialmedia.mvvm.commons.AuthViewModel
 import com.onimus.blablasocialmedia.mvvm.commons.AuthViewModelFactory
 import com.onimus.blablasocialmedia.mvvm.extensions.toast
 import com.onimus.blablasocialmedia.mvvm.utils.ProgressDialog
 import com.onimus.blablasocialmedia.mvvm.utils.sendActionToTextInputLayout
-import kotlinx.android.synthetic.main.login_fragment.tiEmail
+import kotlinx.android.synthetic.main.fragment_login.tiEmail
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
@@ -37,8 +37,8 @@ class ResetPasswordFragment : Fragment(), KodeinAware, AuthListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: ResetPasswordFragmentBinding =
-            DataBindingUtil.inflate(inflater, R.layout.reset_password_fragment, container, false)
+        val binding: FragmentResetPasswordBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_reset_password, container, false)
         viewModel = ViewModelProvider(this, factory).get(AuthViewModel::class.java)
         viewModel.authListener = this
         binding.viewmodel = viewModel

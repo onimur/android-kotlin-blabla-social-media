@@ -20,7 +20,7 @@
         android:id="@+id/profileFragment"
         android:name="com.onimus.blablasocialmedia.mvvm.ui.profile.ProfileFragment"
         android:label="ProfileFragment"
-        tools:layout="@layout/profile_fragment" />
+        tools:layout="@layout/fragment_profile" />
     <navigation
         android:id="@+id/nav_auth"
         app:startDestination="@id/mainFragment">
@@ -28,7 +28,7 @@
             android:id="@+id/mainFragment"
             android:name="com.onimus.blablasocialmedia.mvvm.ui.auth.main.MainFragment"
             android:label="MainFragment"
-            tools:layout="@layout/main_fragment">
+            tools:layout="@layout/fragment_main">
             <action
                 android:id="@+id/action_mainFragment_to_profileFragment"
                 app:destination="@id/profileFragment" />
@@ -43,7 +43,7 @@
             android:id="@+id/registerFragment"
             android:name="com.onimus.blablasocialmedia.mvvm.ui.auth.register.RegisterFragment"
             android:label="fragment_register"
-            tools:layout="@layout/register_fragment">
+            tools:layout="@layout/fragment_register">
             <action
                 android:id="@+id/action_registerFragment_to_loginFragment"
                 app:destination="@id/loginFragment" />
@@ -55,7 +55,7 @@
             android:id="@+id/loginFragment"
             android:name="com.onimus.blablasocialmedia.mvvm.ui.auth.login.LoginFragment"
             android:label="fragment_login"
-            tools:layout="@layout/login_fragment">
+            tools:layout="@layout/fragment_login">
             <action
                 android:id="@+id/action_loginFragment_to_registerFragment"
                 app:destination="@id/registerFragment" />
@@ -71,7 +71,7 @@
     </navigation>
     <navigation
         android:id="@+id/nav_reset_pass"
-        app:startDestination="@id/resetPasswordFragment" >
+        app:startDestination="@id/resetPasswordFragment">
         <fragment
             android:id="@+id/resetPasswordFragment"
             android:name="com.onimus.blablasocialmedia.mvvm.ui.resetpass.reset.ResetPasswordFragment"

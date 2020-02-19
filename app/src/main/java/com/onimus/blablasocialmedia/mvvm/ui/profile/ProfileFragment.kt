@@ -20,7 +20,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.onimus.blablasocialmedia.R
-import com.onimus.blablasocialmedia.databinding.ProfileFragmentBinding
+import com.onimus.blablasocialmedia.databinding.FragmentProfileBinding
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
@@ -34,8 +34,8 @@ class ProfileFragment : Fragment(), KodeinAware, ProfileListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: ProfileFragmentBinding =
-            DataBindingUtil.inflate(inflater, R.layout.profile_fragment, container, false)
+        val binding: FragmentProfileBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false)
         viewModel = ViewModelProvider(this, factory).get(ProfileViewModel::class.java)
         viewModel.profileListener = this
         binding.viewmodel = viewModel
