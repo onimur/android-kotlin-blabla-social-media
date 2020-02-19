@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
 import com.onimus.blablasocialmedia.R
 import com.onimus.blablasocialmedia.databinding.ResetPasswordFragmentBinding
 import com.onimus.blablasocialmedia.mvvm.commons.AuthListener
@@ -29,6 +31,7 @@ class ResetPasswordFragment : Fragment(), KodeinAware, AuthListener {
     private val factory: AuthViewModelFactory by instance()
 
     private lateinit var viewModel: AuthViewModel
+    private lateinit var actionNav: NavDirections
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,15 +62,13 @@ class ResetPasswordFragment : Fragment(), KodeinAware, AuthListener {
     }
 
     override fun onSuccessAuth() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        context?.toast("${getString(R.string.email_sent_to)}: ${viewModel.email}")
+        actionNav = ResetPasswordFragmentDirections.actionResetPasswordFragmentToSuccessSendingEmailFragment()
+        findNavController().navigate(actionNav)
     }
 
     override fun onFailureAuth(resId: Int) {
         context?.toast("${getString(R.string.error_send_email)}: ${getString(resId)}")
-    }
-
-    override fun onNavigate() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun inEmailValidationError(resId: Int) {
