@@ -17,7 +17,7 @@ import com.onimus.blablasocialmedia.mvvm.commons.AuthViewModelFactory
 import com.onimus.blablasocialmedia.mvvm.extensions.toast
 import com.onimus.blablasocialmedia.mvvm.utils.ProgressDialog
 import com.onimus.blablasocialmedia.mvvm.utils.sendActionToTextInputLayout
-import kotlinx.android.synthetic.main.fragment_login.tiEmail
+import kotlinx.android.synthetic.main.fragment_login.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance

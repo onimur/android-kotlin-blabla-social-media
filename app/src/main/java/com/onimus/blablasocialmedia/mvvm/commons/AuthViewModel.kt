@@ -12,7 +12,6 @@
 
 package com.onimus.blablasocialmedia.mvvm.commons
 
-import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
