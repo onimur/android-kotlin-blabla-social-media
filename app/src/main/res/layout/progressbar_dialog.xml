@@ -25,11 +25,11 @@
         android:layout_gravity="center" />
 
     <TextView
+        android:id="@+id/tvProgressDialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:paddingTop="15dp"
-        android:text="@string/validating"
         android:textColor="@color/colorDark"
         android:textSize="16sp" />
 </LinearLayout>

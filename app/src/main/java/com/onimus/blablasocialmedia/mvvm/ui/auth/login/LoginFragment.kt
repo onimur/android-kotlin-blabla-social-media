@@ -38,7 +38,7 @@ import org.kodein.di.generic.instance
 class LoginFragment : Fragment(), KodeinAware, AuthListener {
 
     override val kodein by kodein()
-    private val progressBar: ProgressDialog by lazy { ProgressDialog(context!!) }
+    private val progressBar: ProgressDialog by lazy { ProgressDialog(context!!, R.string.validating) }
 
     private val factory: AuthViewModelFactory by instance()
 

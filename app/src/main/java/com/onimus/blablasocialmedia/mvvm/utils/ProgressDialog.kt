@@ -17,13 +17,16 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import com.onimus.blablasocialmedia.R
+import kotlinx.android.synthetic.main.progressbar_dialog.*
 
-class ProgressDialog(context: Context) : Dialog(context) {
+class ProgressDialog(context: Context, private val resId: Int) : Dialog(context) {
 
     override fun create() {
         setCancelable(false)
         val view = layoutInflater.inflate(R.layout.progressbar_dialog, null)
         setContentView(view)
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        tvProgressDialog.text = context.getString(resId)
+
     }
 }
