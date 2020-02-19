@@ -31,7 +31,10 @@
     <string name="registered_email">Registered email</string>
     <string name="login_email">Login email</string>
     <string name="authentication_failed">Authentication failed</string>
-    <string name="not_have_account_register">"Dont't have an account"? Create</string>
+    <string name="not_have_account_register">"Don't have an account"? Create</string>
     <string name="forgot_your_password">Forgot your password?</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="send">Send</string>
+    <string name="error_send_email">Error sending email</string>
 
 </resources>
