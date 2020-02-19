@@ -91,8 +91,13 @@ class LoginFragment : Fragment(), KodeinAware, AuthListener {
         context?.toast("${getString(R.string.authentication_failed)}: ${getString(resId)}")
     }
 
-    override fun onNavigate() {
+    override fun onClickTextViewRegister() {
         actionNav = LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
+        findNavController().navigate(actionNav)
+    }
+
+    override fun onClickTextViewForgotPassword() {
+        actionNav = LoginFragmentDirections.actionLoginFragmentToResetFragment()
         findNavController().navigate(actionNav)
     }
 

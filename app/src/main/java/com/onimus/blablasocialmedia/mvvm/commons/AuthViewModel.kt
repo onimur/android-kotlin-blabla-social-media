@@ -12,15 +12,18 @@
 
 package com.onimus.blablasocialmedia.mvvm.commons
 
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.onimus.blablasocialmedia.mvvm.data.repository.UserRepository
 import com.onimus.blablasocialmedia.mvvm.utils.AppConstants
 import com.onimus.blablasocialmedia.mvvm.utils.HandleErrors
+import io.reactivex.Completable
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 
@@ -56,6 +59,9 @@ class AuthViewModel(
         progressBarActive.postValue(status)
     }
 
+    /**
+     * button handler
+     */
     fun onClickButtonRegister() {
         setActionToAuthenticationButton(AppConstants.Button.REGISTER)
     }
@@ -64,42 +70,8 @@ class AuthViewModel(
         setActionToAuthenticationButton(AppConstants.Button.LOGIN)
     }
 
-    private fun setActionToAuthenticationButton(button: Int) {
-        authListener?.resetTextInputLayout()
-        //validate email and password
-        val checkEmail = handleErrors.checkEmail(email)
-        val checkPassword = handleErrors.checkPassword(password)
-
-        //email and password is valid
-        when {
-            checkEmail.and(checkPassword) == -1 -> {
-                authListener?.resetTextInputLayout()
-                //if is valid then show progress
-                authListener?.showProgress()
-                //calling repository to perform the actual authentication
-                val completable = when (button) {
-                    AppConstants.Button.LOGIN -> repository.onLoginClicked(email!!, password!!)
-                    else -> repository.onRegisterClicked(email!!, password!!)
-                }
-
-                val disposable = completable
-                    .subscribeOn(processScheduler)
-                    .observeOn(observerScheduler)
-                    .subscribe({
-                        authListener?.hideProgress()
-                        authListener?.onSuccessAuth()
-                    }, {
-
-                        authListener?.hideProgress()
-                        val error = handleErrors.getMessageError(it)
-                        //show message
-                        authListener?.onFailureAuth(error)
-                    })
-                disposables.add(disposable)
-            }
-            checkEmail != -1 -> authListener?.inEmailValidationError(checkEmail)
-            checkPassword != -1 -> authListener?.inPasswordValidationError(checkPassword)
-        }
+    fun onClickButtonReset() {
+        setActionToResetButton()
     }
 
     fun onClickTextViewLogin() {
@@ -109,6 +81,76 @@ class AuthViewModel(
 
     fun onClickTextViewRegister() {
         //go to register_fragment
-        authListener?.onNavigate()
+        authListener?.onClickTextViewRegister()
+    }
+
+    fun onClickTextViewForgotPassword() {
+        //go to reset_password_fragment
+        authListener?.onClickTextViewForgotPassword()
+    }
+
+    /**
+     * Action for buttons
+     */
+    private fun setActionToAuthenticationButton(button: Int) {
+        authListener?.resetTextInputLayout()
+        //validate email and password
+        val checkEmail = handleErrors.checkEmail(email)
+        val checkPassword = handleErrors.checkPassword(password)
+
+        //email and password is valid
+        when {
+            checkEmail.and(checkPassword) == AppConstants.VALID -> {
+                authListener?.resetTextInputLayout()
+                //if is valid then show progress
+                authListener?.showProgress()
+                //calling repository to perform the actual authentication
+                val completable = when (button) {
+                    AppConstants.Button.LOGIN -> repository.onLoginClicked(email!!, password!!)
+                    else -> repository.onRegisterClicked(email!!, password!!)
+                }
+
+                val disposable = getDisposable(completable)
+                disposables.add(disposable)
+            }
+            checkEmail != AppConstants.VALID -> authListener?.inEmailValidationError(checkEmail)
+            checkPassword != AppConstants.VALID -> authListener?.inPasswordValidationError(
+                checkPassword
+            )
+        }
+    }
+
+    private fun setActionToResetButton() {
+        authListener?.resetTextInputLayout()
+        //validate email and password
+
+        //email is valid
+        when (val checkEmail = handleErrors.checkEmail(email)) {
+            AppConstants.VALID -> {
+                authListener?.resetTextInputLayout()
+                //if is valid then show progress
+                authListener?.showProgress()
+                //calling repository to perform the actual authentication
+                val disposable = getDisposable(repository.onResetPasswordClicked(email!!))
+                disposables.add(disposable)
+            }
+            else -> authListener?.inEmailValidationError(checkEmail)
+        }
+    }
+
+    private fun getDisposable(completable: Completable): Disposable {
+        return completable
+            .subscribeOn(processScheduler)
+            .observeOn(observerScheduler)
+            .subscribe({
+                authListener?.hideProgress()
+                authListener?.onSuccessAuth()
+            }, {
+
+                authListener?.hideProgress()
+                val error = handleErrors.getMessageError(it)
+                //show message
+                authListener?.onFailureAuth(error)
+            })
     }
 }
