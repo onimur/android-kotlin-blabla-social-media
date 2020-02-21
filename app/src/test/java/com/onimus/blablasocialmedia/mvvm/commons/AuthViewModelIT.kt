@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.onimus.blablasocialmedia.R
 import com.onimus.blablasocialmedia.mvvm.data.firebase.FirebaseManager
@@ -56,11 +57,16 @@ class AuthViewModelIT {
     @MockK
     var mockAuthTask: Task<AuthResult> = mockk(relaxed = true)
     @MockK
+    var mockVoidTask: Task<Void> = mockk(relaxed = true)
+    @MockK
     private lateinit var mockAuth: FirebaseAuth
 
     //Captor
     private val slotCompleteListener = slot<OnCompleteListener<AuthResult>>()
     private val slotFailureListener = slot<OnFailureListener>()
+
+    private val slotCompleteListenerReset = slot<OnCompleteListener<Void>>()
+    private val slotFailureListenerReset = slot<OnFailureListener>()
 
     @Before
     fun setUp() {
@@ -100,8 +106,18 @@ class AuthViewModelIT {
             )
         } returns mockAuthTask
 
+        every {
+            mockAuth.sendPasswordResetEmail(
+                CORRECT_EMAIL
+            )
+        } returns mockVoidTask
+
         every { mockAuthTask.addOnCompleteListener(capture(slotCompleteListener)) } returns mockAuthTask
         every { mockAuthTask.addOnFailureListener(capture(slotFailureListener)) } returns mockAuthTask
+
+        every { mockVoidTask.addOnCompleteListener(capture(slotCompleteListenerReset)) } returns mockVoidTask
+        every { mockVoidTask.addOnFailureListener(capture(slotFailureListenerReset)) } returns mockVoidTask
+
     }
 
     @After
@@ -127,9 +143,15 @@ class AuthViewModelIT {
     }
 
     @Test
-    fun `onClickTextViewRegister should call onNavigate`() {
+    fun `onClickTextViewRegister should call onClickTextViewRegister`() {
         authViewModel.onClickTextViewRegister()
-        verify(exactly = 1) { mockAuthListener.onNavigate() }
+        verify(exactly = 1) { mockAuthListener.onClickTextViewRegister() }
+    }
+
+    @Test
+    fun `onClickTextViewForgotPassword should call onClickTextViewForgotPassword`() {
+        authViewModel.onClickTextViewForgotPassword()
+        verify(exactly = 1) { mockAuthListener.onClickTextViewForgotPassword() }
     }
     /////////////////////////////////////////////////////////////////////////////////////
     /**
@@ -245,11 +267,61 @@ class AuthViewModelIT {
     }
 
     @Test
+    fun `onClickButtonReset should be isSuccessful`() {
+        authViewModel.onClickButtonReset()
+
+        every { mockVoidTask.isSuccessful } returns true
+        slotCompleteListenerReset.captured.onComplete(mockVoidTask)
+        verify {
+            mockAuth.sendPasswordResetEmail(
+                eq(CORRECT_EMAIL)
+            )
+        }
+        verify(exactly = 2) { mockAuthListener.resetTextInputLayout() }
+        verify(exactly = 1) { mockAuthListener.showProgress() }
+        verify(exactly = 1) { mockAuthListener.hideProgress() }
+        verify(exactly = 1) { mockAuthListener.onSuccessAuth() }
+    }
+
+    @Test
+    fun `onClickButtonReset should be return error with FirebaseAuthException`() {
+        authViewModel.onClickButtonReset()
+
+        slotFailureListenerReset.captured.onFailure(
+            FirebaseAuthInvalidCredentialsException(
+                AppConstants.ErrorFirebaseAuth.ERROR_USER_NOT_FOUND,
+                "test2"
+            )
+        )
+
+        verify {
+            mockAuth.sendPasswordResetEmail(
+                eq(CORRECT_EMAIL)
+            )
+        }
+        verify(exactly = 1) { mockAuthListener.onFailureAuth(R.string.error_user_not_found) }
+
+    }
+
+    @Test
+    fun `onClickButtonReset should be return unknown error with other Exception`() {
+        authViewModel.onClickButtonReset()
+
+        slotFailureListenerReset.captured.onFailure(Exception())
+        verify {
+            mockAuth.sendPasswordResetEmail(
+                eq(CORRECT_EMAIL)
+            )
+        }
+        verify { mockAuthListener.onFailureAuth(R.string.error_unknown) }
+    }
+
+    @Test
     fun `onClickButtonRegister with invalid email should be call inEmailValidationError`() {
         authViewModel.email = "adddss.com"
 
         authViewModel.onClickButtonRegister()
-        verify (exactly = 1){ mockAuthListener.inEmailValidationError(R.string.error_invalid_email_format) }
+        verify(exactly = 1) { mockAuthListener.inEmailValidationError(R.string.error_invalid_email_format) }
     }
 
     @Test
@@ -257,7 +329,7 @@ class AuthViewModelIT {
         authViewModel.password = "123456"
 
         authViewModel.onClickButtonRegister()
-        verify (exactly = 1){ mockAuthListener.inPasswordValidationError(R.string.error_password_weak) }
+        verify(exactly = 1) { mockAuthListener.inPasswordValidationError(R.string.error_password_weak) }
     }
 
     @Test
@@ -265,7 +337,7 @@ class AuthViewModelIT {
         authViewModel.email = "adddss.com"
 
         authViewModel.onClickButtonLogin()
-        verify (exactly = 1){ mockAuthListener.inEmailValidationError(R.string.error_invalid_email_format) }
+        verify(exactly = 1) { mockAuthListener.inEmailValidationError(R.string.error_invalid_email_format) }
     }
 
     @Test
@@ -273,6 +345,14 @@ class AuthViewModelIT {
         authViewModel.password = "123456"
 
         authViewModel.onClickButtonLogin()
-        verify (exactly = 1){ mockAuthListener.inPasswordValidationError(R.string.error_password_weak) }
+        verify(exactly = 1) { mockAuthListener.inPasswordValidationError(R.string.error_password_weak) }
+    }
+
+    @Test
+    fun `onClickButtonReset with invalid email should be call inEmailValidationError`() {
+        authViewModel.email = "adddss.com"
+
+        authViewModel.onClickButtonReset()
+        verify(exactly = 1) { mockAuthListener.inEmailValidationError(R.string.error_invalid_email_format) }
     }
 }
