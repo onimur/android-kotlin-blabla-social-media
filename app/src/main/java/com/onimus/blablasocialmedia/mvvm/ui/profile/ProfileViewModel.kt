@@ -22,4 +22,17 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
     val user by lazy {
         repository.currentUser()
     }
+
+    fun checkUserStatus() {
+        if (user == null) {
+            //user signout
+            profileListener?.onLogout()
+        }
+    }
+
+    fun onClickButtonLogout(){
+        repository.logout()
+        profileListener?.onLogout()
+
+    }
 }

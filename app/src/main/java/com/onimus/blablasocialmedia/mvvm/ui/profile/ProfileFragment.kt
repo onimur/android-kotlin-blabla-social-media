@@ -19,6 +19,8 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
 import com.onimus.blablasocialmedia.R
 import com.onimus.blablasocialmedia.databinding.FragmentProfileBinding
 import org.kodein.di.KodeinAware
@@ -30,6 +32,9 @@ class ProfileFragment : Fragment(), KodeinAware, ProfileListener {
 
     private val factory: ProfileViewModelFactory by instance()
     private lateinit var viewModel: ProfileViewModel
+
+    private lateinit var actionNav: NavDirections
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,5 +46,16 @@ class ProfileFragment : Fragment(), KodeinAware, ProfileListener {
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
         return binding.root
+    }
+
+    override fun onStart() {
+        viewModel.checkUserStatus()
+        super.onStart()
+    }
+
+    override fun onLogout() {
+        //go to mainFragment
+        actionNav = ProfileFragmentDirections.actionProfileFragmentToMainFragment()
+        findNavController().navigate(actionNav)
     }
 }

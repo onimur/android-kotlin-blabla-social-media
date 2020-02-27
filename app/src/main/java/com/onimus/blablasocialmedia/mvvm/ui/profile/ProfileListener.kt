@@ -12,4 +12,8 @@
 
 package com.onimus.blablasocialmedia.mvvm.ui.profile
 
-interface ProfileListener
+interface ProfileListener {
+
+    fun onLogout()
+
+}
