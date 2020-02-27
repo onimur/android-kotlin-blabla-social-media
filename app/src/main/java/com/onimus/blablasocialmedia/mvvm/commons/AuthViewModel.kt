@@ -152,4 +152,11 @@ class AuthViewModel(
                 authListener?.onFailureAuth(error)
             })
     }
+
+    override fun onCleared() {
+        //onCleared is called when the app is put into the background and the app process is killed in order to free up the system's memory.
+        super.onCleared()
+        // Using dispose will clear all and set isDisposed = true, so it will not accept any new disposable
+        disposables.dispose()
+    }
 }
