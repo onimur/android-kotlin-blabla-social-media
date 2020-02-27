@@ -38,5 +38,6 @@
     <string name="error_send_email">Error sending email</string>
     <string name="email_sent_to">Email sent to</string>
     <string name="sending">Sending…</string>
+    <string name="logout">Logout</string>
 
 </resources>
