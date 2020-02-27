@@ -3,7 +3,6 @@
     <string name="user_profile">User Profile</string>
     <string name="register">Register</string>
     <string name="login">Login</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="create_account">Create Account</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -39,5 +38,5 @@
     <string name="email_sent_to">Email sent to</string>
     <string name="sending">Sending…</string>
     <string name="logout">Logout</string>
-
+    <string name="check_your_email_to_reset_your_password">Check your email to reset your password</string>
 </resources>
