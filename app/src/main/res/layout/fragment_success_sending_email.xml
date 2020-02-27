@@ -9,6 +9,6 @@ tools:context=".mvvm.ui.resetpass.successsending.SuccessSendingEmailFragment">
 <TextView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:text="@string/hello_blank_fragment" />
+    android:text="@string/check_your_email_to_reset_your_password" />
 
 </FrameLayout>
