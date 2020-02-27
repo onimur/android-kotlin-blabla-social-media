@@ -19,6 +19,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.onimus.blablasocialmedia.R
 import com.onimus.blablasocialmedia.databinding.FragmentMainBinding
@@ -32,6 +33,8 @@ class MainFragment : Fragment(), KodeinAware, MainListener {
     private val factory: MainViewModelFactory by instance()
 
     private lateinit var viewModel: MainViewModel
+
+    private lateinit var actionNav: NavDirections
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,19 +56,19 @@ class MainFragment : Fragment(), KodeinAware, MainListener {
 
     override fun onRegisterClicked() {
         //go to fragment_register
-        val action = MainFragmentDirections.actionMainFragmentToRegisterFragment()
-        findNavController().navigate(action)
+        actionNav = MainFragmentDirections.actionMainFragmentToRegisterFragment()
+        findNavController().navigate(actionNav)
     }
 
     override fun onLoginClicked() {
         //go to fragment_login
-        val action = MainFragmentDirections.actionMainFragmentToLoginFragment()
-        findNavController().navigate(action)
+        actionNav = MainFragmentDirections.actionMainFragmentToLoginFragment()
+        findNavController().navigate(actionNav)
     }
 
     override fun onUserLogged() {
         //go to fragment_profile
-        val action = MainFragmentDirections.actionMainFragmentToProfileFragment()
-        findNavController().navigate(action)
+        actionNav = MainFragmentDirections.actionMainFragmentToProfileFragment()
+        findNavController().navigate(actionNav)
     }
 }
