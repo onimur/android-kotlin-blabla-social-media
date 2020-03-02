@@ -24,9 +24,6 @@ import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.onimus.blablasocialmedia.R
 import com.onimus.blablasocialmedia.databinding.FragmentLoginBinding
-import com.onimus.blablasocialmedia.mvvm.commons.AuthListener
-import com.onimus.blablasocialmedia.mvvm.commons.AuthViewModel
-import com.onimus.blablasocialmedia.mvvm.commons.AuthViewModelFactory
 import com.onimus.blablasocialmedia.mvvm.extensions.toast
 import com.onimus.blablasocialmedia.mvvm.utils.ProgressDialog
 import com.onimus.blablasocialmedia.mvvm.utils.sendActionToTextInputLayout
@@ -35,14 +32,14 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
 
-class LoginFragment : Fragment(), KodeinAware, AuthListener {
+class LoginFragment : Fragment(), KodeinAware, LoginListener {
 
     override val kodein by kodein()
     private val progressBar: ProgressDialog by lazy { ProgressDialog(context!!, R.string.validating) }
 
-    private val factory: AuthViewModelFactory by instance()
+    private val factory: LoginViewModelFactory by instance()
 
-    private lateinit var viewModel: AuthViewModel
+    private lateinit var viewModel: LoginViewModel
     private lateinit var actionNav: NavDirections
 
     override fun onCreateView(
@@ -51,8 +48,8 @@ class LoginFragment : Fragment(), KodeinAware, AuthListener {
     ): View? {
         val binding: FragmentLoginBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
-        viewModel = ViewModelProvider(this, factory).get(AuthViewModel::class.java)
-        viewModel.authListener = this
+        viewModel = ViewModelProvider(this, factory).get(LoginViewModel::class.java)
+        viewModel.loginListener = this
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
         //
