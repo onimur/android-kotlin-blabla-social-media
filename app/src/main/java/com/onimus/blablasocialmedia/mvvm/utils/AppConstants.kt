@@ -19,11 +19,6 @@ object AppConstants {
         const val LOG_D = "Onimus/check"
     }
 
-    object Button {
-        const val REGISTER = 1
-        const val LOGIN = 2
-    }
-
     const val VALID = -1
 
     object ErrorFirebaseAuth {
