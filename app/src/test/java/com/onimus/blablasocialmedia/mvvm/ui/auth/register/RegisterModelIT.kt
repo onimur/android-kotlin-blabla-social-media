@@ -144,7 +144,7 @@ class RegisterModelIT {
     /////////////////////////////////////////////////////////////////////////////////////
     /**
      * Testing methods related to the rxjava2 library.
-     * Events Tested: Click the "Register" button and click the "Log In" button
+     * Events Tested: Click the "Register" button
      */
     @Test
     fun `onClickButtonRegister should be isSuccessful`() {
