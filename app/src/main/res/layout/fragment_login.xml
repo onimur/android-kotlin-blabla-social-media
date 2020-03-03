@@ -93,10 +93,20 @@
             android:layout_height="wrap_content"
             android:onClick="@{() -> viewmodel.onClickButtonLogin()}"
             android:text="@string/login"
-            app:layout_constraintBottom_toTopOf="@+id/tvRegister"
+            app:layout_constraintBottom_toTopOf="@+id/btnGoogleSignIn"
             app:layout_constraintEnd_toStartOf="@+id/guideline_end"
             app:layout_constraintStart_toStartOf="@+id/guideline_start"
             app:layout_constraintTop_toBottomOf="@+id/tvForgotPassword" />
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/btnGoogleSignIn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> viewmodel.onClickButtonGoogleSignIn()}"
+            app:layout_constraintBottom_toTopOf="@+id/tvRegister"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_end"
+            app:layout_constraintStart_toStartOf="@+id/guideline_start"
+            app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
 
         <TextView
             android:id="@+id/tvRegister"
