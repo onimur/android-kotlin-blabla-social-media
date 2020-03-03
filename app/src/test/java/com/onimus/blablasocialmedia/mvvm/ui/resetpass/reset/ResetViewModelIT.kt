@@ -28,8 +28,6 @@ import io.mockk.impl.annotations.MockK
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import org.junit.After
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -124,18 +122,6 @@ class ResetViewModelIT {
         clearAllMocks()
     }
 
-    @Test
-    fun `the first time getProgressBarStatus is called should return false`() {
-        assertFalse(resetViewModel.getProgressBarStatus().value!!)
-    }
-
-    @Test
-    fun `getProgressBarStatus should return true`() {
-        resetViewModel.setProgressBarStatus(true)
-        assertTrue(resetViewModel.getProgressBarStatus().value!!)
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////
     /**
      * Testing methods related to the rxjava2 library.
      * Events Tested: Click the "Reset Password" button

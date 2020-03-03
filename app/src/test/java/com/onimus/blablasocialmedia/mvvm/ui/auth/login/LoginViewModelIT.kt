@@ -28,8 +28,6 @@ import io.mockk.impl.annotations.MockK
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import org.junit.After
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -121,17 +119,6 @@ class LoginViewModelIT {
     @After
     fun tearDown() {
         clearAllMocks()
-    }
-
-    @Test
-    fun `the first time getProgressBarStatus is called should return false`() {
-        assertFalse(loginViewModel.getProgressBarStatus().value!!)
-    }
-
-    @Test
-    fun `getProgressBarStatus should return true`() {
-        loginViewModel.setProgressBarStatus(true)
-        assertTrue(loginViewModel.getProgressBarStatus().value!!)
     }
 
     @Test
