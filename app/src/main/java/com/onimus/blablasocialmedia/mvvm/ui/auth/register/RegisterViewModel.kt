@@ -12,9 +12,7 @@
 
 package com.onimus.blablasocialmedia.mvvm.ui.auth.register
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.onimus.blablasocialmedia.mvvm.common.ProgressViewModel
 import com.onimus.blablasocialmedia.mvvm.data.repository.UserRepository
 import com.onimus.blablasocialmedia.mvvm.utils.AppConstants
 import com.onimus.blablasocialmedia.mvvm.utils.HandleErrors
@@ -30,7 +28,7 @@ class RegisterViewModel(
     private val repository: UserRepository,
     private val processScheduler: Scheduler = Schedulers.io(),
     private val observerScheduler: Scheduler = AndroidSchedulers.mainThread()
-) : ViewModel() {
+) : ProgressViewModel() {
 
     var email: String? = null
     var password: String? = null
@@ -40,23 +38,6 @@ class RegisterViewModel(
 
     //disposable to dispose the Completable
     private val disposables = CompositeDisposable()
-
-    //create livedata variable to save the progressbar(dialog) state
-    private val progressBarActive = MutableLiveData<Boolean>(false)
-
-    /**
-     * get status from viewmodel
-     */
-    fun getProgressBarStatus(): LiveData<Boolean> {
-        return progressBarActive
-    }
-
-    /**
-     *   save status to viewmodel
-     */
-    fun setProgressBarStatus(status: Boolean) {
-        progressBarActive.postValue(status)
-    }
 
     /**
      * button handler
