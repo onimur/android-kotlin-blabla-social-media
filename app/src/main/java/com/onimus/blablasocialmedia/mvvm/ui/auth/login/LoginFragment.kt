@@ -13,7 +13,9 @@
 package com.onimus.blablasocialmedia.mvvm.ui.auth.login
 
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,9 +24,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.SignInButton
+import com.google.android.gms.common.api.ApiException
 import com.onimus.blablasocialmedia.R
 import com.onimus.blablasocialmedia.databinding.FragmentLoginBinding
 import com.onimus.blablasocialmedia.mvvm.extensions.toast
+import com.onimus.blablasocialmedia.mvvm.utils.AppConstants
+import com.onimus.blablasocialmedia.mvvm.utils.AppConstants.RC_SIGN_IN
 import com.onimus.blablasocialmedia.mvvm.utils.ProgressDialog
 import com.onimus.blablasocialmedia.mvvm.utils.sendActionToTextInputLayout
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -35,10 +43,22 @@ import org.kodein.di.generic.instance
 class LoginFragment : Fragment(), KodeinAware, LoginListener {
 
     override val kodein by kodein()
-    private val progressBar: ProgressDialog by lazy { ProgressDialog(context!!, R.string.validating) }
+    private val progressBar: ProgressDialog by lazy {
+        ProgressDialog(
+            context!!,
+            R.string.validating
+        )
+    }
+
+    private val googleSignInClient by lazy {
+        GoogleSignIn.getClient(context!!, gso)
+    }
+
+    // Configure Google Sign In
+    private lateinit var gso: GoogleSignInOptions
 
     private val factory: LoginViewModelFactory by instance()
-
+    private lateinit var btnSign: SignInButton
     private lateinit var viewModel: LoginViewModel
     private lateinit var actionNav: NavDirections
 
@@ -53,6 +73,7 @@ class LoginFragment : Fragment(), KodeinAware, LoginListener {
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
         //
+        btnSign = binding.root.findViewById(R.id.btnGoogleSignIn)
         initVariables()
         startAction()
         //
@@ -60,7 +81,15 @@ class LoginFragment : Fragment(), KodeinAware, LoginListener {
     }
 
     private fun initVariables() {
+        gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+
+
         progressBar.create()
+
     }
 
     private fun startAction() {
@@ -68,6 +97,19 @@ class LoginFragment : Fragment(), KodeinAware, LoginListener {
         if (viewModel.getProgressBarStatus().value!! && !progressBar.isShowing) {
             progressBar.show()
         }
+
+        /**
+         * Important: Note that you must explicitly call setOnClickListener(OnClickListener).
+         * Do not register a listener via XML, or you won't receive your callbacks.
+         */
+        btnSign.setOnClickListener {
+            signIn()
+        }
+    }
+
+    private fun signIn() {
+        val signInIntent = googleSignInClient.signInIntent
+        startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
     override fun inEmailValidationError(resId: Int) {
@@ -113,4 +155,24 @@ class LoginFragment : Fragment(), KodeinAware, LoginListener {
         tiEmail.error = null
         tiPass.error = null
     }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                val account = task.getResult(ApiException::class.java)
+                viewModel.onAuthGoogleSignIn(account!!)
+            } catch (e: ApiException) {
+                // Google Sign In failed, update UI appropriately
+                Log.w(AppConstants.Tag.LOG_W, "Google sign in failed", e)
+                //
+            }
+        }
+    }
+
 }

@@ -13,9 +13,11 @@
 package com.onimus.blablasocialmedia.mvvm.data.firebase
 
 import android.util.Log
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.onimus.blablasocialmedia.mvvm.utils.AppConstants
 import io.reactivex.Completable
 import io.reactivex.CompletableEmitter
@@ -34,6 +36,16 @@ class FirebaseManager {
     fun onLoginClicked(email: String, password: String) = Completable.create { emitter ->
         if (!emitter.isDisposed) {
             createOrSigInUser(firebaseAuth.signInWithEmailAndPassword(email, password), emitter)
+        }
+    }
+
+    fun onGoogleSigInClicked(account: GoogleSignInAccount): Completable {
+        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+
+        return Completable.create { emitter ->
+            if (!emitter.isDisposed) {
+                createOrSigInUser(firebaseAuth.signInWithCredential(credential), emitter)
+            }
         }
     }
 
