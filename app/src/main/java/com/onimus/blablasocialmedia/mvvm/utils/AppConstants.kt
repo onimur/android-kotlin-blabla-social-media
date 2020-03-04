@@ -21,6 +21,8 @@ object AppConstants {
 
     const val VALID = -1
 
+    const val RC_SIGN_IN = 100
+
     object ErrorFirebaseAuth {
         const val ERROR_EMAIL_ALREADY_IN_USE = "ERROR_EMAIL_ALREADY_IN_USE"
         const val ERROR_INVALID_EMAIL = "ERROR_INVALID_EMAIL"

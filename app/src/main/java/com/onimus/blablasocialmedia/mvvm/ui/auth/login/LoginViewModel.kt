@@ -13,6 +13,8 @@
 package com.onimus.blablasocialmedia.mvvm.ui.auth.login
 
 
+import android.util.Log
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.onimus.blablasocialmedia.mvvm.common.ProgressViewModel
 import com.onimus.blablasocialmedia.mvvm.data.repository.UserRepository
 import com.onimus.blablasocialmedia.mvvm.utils.AppConstants
@@ -45,6 +47,11 @@ class LoginViewModel(
      */
     fun onClickButtonLogin() {
         setActionToAuthenticationButton()
+    }
+
+    fun onAuthGoogleSignIn(account: GoogleSignInAccount) {
+        //login process
+        setActionToAuthenticationGoogleSignIn(account)
     }
 
     fun onClickTextViewRegister() {
@@ -84,6 +91,20 @@ class LoginViewModel(
                 checkPassword
             )
         }
+    }
+
+    private fun setActionToAuthenticationGoogleSignIn(account: GoogleSignInAccount) {
+        //if is valid then show progress
+        loginListener?.showProgress()
+        //calling repository to perform the actual authentication
+        Log.d(AppConstants.Tag.LOG_D, "firebaseAuthWithGoogle:" + account.id!!)
+        email = account.email
+
+        val completable =
+            repository.onGoogleSignInClicked(account)
+
+        val disposable = getDisposable(completable)
+        disposables.add(disposable)
     }
 
 
