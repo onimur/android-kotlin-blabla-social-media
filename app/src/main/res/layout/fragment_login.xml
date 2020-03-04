@@ -102,7 +102,6 @@
             android:id="@+id/btnGoogleSignIn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> viewmodel.onClickButtonGoogleSignIn()}"
             app:layout_constraintBottom_toTopOf="@+id/tvRegister"
             app:layout_constraintEnd_toStartOf="@+id/guideline_end"
             app:layout_constraintStart_toStartOf="@+id/guideline_start"
