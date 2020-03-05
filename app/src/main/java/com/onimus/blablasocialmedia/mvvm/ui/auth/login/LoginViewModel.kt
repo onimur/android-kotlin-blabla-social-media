@@ -15,6 +15,7 @@ package com.onimus.blablasocialmedia.mvvm.ui.auth.login
 
 import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.tasks.Task
 import com.onimus.blablasocialmedia.mvvm.common.ProgressViewModel
 import com.onimus.blablasocialmedia.mvvm.data.repository.UserRepository
 import com.onimus.blablasocialmedia.mvvm.utils.AppConstants
@@ -49,9 +50,14 @@ class LoginViewModel(
         setActionToAuthenticationButton()
     }
 
-    fun onAuthGoogleSignIn(account: GoogleSignInAccount) {
+    fun onClickButtonGoogleSignIn(task: Task<GoogleSignInAccount>) {
         //login process
-        setActionToAuthenticationGoogleSignIn(account)
+        setActionToGoogleSignIn(task)
+    }
+
+    fun firebaseAuthWithGoogle(idToken: String?) {
+        //login process
+        setActionToAuthenticationGoogleSignIn(idToken)
     }
 
     fun onClickTextViewRegister() {
@@ -83,7 +89,7 @@ class LoginViewModel(
                 val completable =
                     repository.onLoginClicked(email!!, password!!)
 
-                val disposable = getDisposable(completable)
+                val disposable = getDisposableOnAuth(completable)
                 disposables.add(disposable)
             }
             checkEmail != AppConstants.VALID -> loginListener?.inEmailValidationError(checkEmail)
@@ -93,22 +99,30 @@ class LoginViewModel(
         }
     }
 
-    private fun setActionToAuthenticationGoogleSignIn(account: GoogleSignInAccount) {
+    private fun setActionToGoogleSignIn(task: Task<GoogleSignInAccount>) {
+        //calling the repository to retrieve user information on the google account.
+        val completable =
+            repository.onGoogleSignInClicked(task)
+
+        val disposable = getDisposableOnGoogleSignIn(completable)
+        disposables.add(disposable)
+    }
+
+    private fun setActionToAuthenticationGoogleSignIn(idToken: String?) {
         //if is valid then show progress
         loginListener?.showProgress()
         //calling repository to perform the actual authentication
-        Log.d(AppConstants.Tag.LOG_D, "firebaseAuthWithGoogle:" + account.id!!)
-        email = account.email
+        Log.d(AppConstants.Tag.LOG_D, "firebaseAuthWithGoogle: $idToken")
 
         val completable =
-            repository.onGoogleSignInClicked(account)
+            repository.firebaseAuthWithGoogle(idToken)
 
-        val disposable = getDisposable(completable)
+        val disposable = getDisposableOnAuth(completable)
         disposables.add(disposable)
     }
 
 
-    private fun getDisposable(completable: Completable): Disposable {
+    private fun getDisposableOnAuth(completable: Completable): Disposable {
         return completable
             .subscribeOn(processScheduler)
             .observeOn(observerScheduler)
@@ -118,6 +132,19 @@ class LoginViewModel(
             }, {
 
                 loginListener?.hideProgress()
+                val error = handleErrors.getMessageError(it)
+                //show message
+                loginListener?.onFailureAuth(error)
+            })
+    }
+
+    private fun getDisposableOnGoogleSignIn(completable: Completable): Disposable {
+        return completable
+            .subscribeOn(processScheduler)
+            .observeOn(observerScheduler)
+            .subscribe({
+                loginListener?.onSuccessGoogleSign()
+            }, {
                 val error = handleErrors.getMessageError(it)
                 //show message
                 loginListener?.onFailureAuth(error)
