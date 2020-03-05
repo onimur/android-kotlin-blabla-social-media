@@ -14,13 +14,14 @@ package com.onimus.blablasocialmedia.mvvm.data.firebase
 
 import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.onimus.blablasocialmedia.mvvm.utils.AppConstants
 import io.reactivex.Completable
 import io.reactivex.CompletableEmitter
+
 
 class FirebaseManager {
     private val firebaseAuth: FirebaseAuth by lazy {
@@ -29,29 +30,38 @@ class FirebaseManager {
 
     fun onRegisterClicked(email: String, password: String) = Completable.create { emitter ->
         if (!emitter.isDisposed) {
-            createOrSigInUser(firebaseAuth.createUserWithEmailAndPassword(email, password), emitter)
+            actionFirebaseAuth(
+                firebaseAuth.createUserWithEmailAndPassword(email, password),
+                emitter
+            )
         }
     }
 
     fun onLoginClicked(email: String, password: String) = Completable.create { emitter ->
         if (!emitter.isDisposed) {
-            createOrSigInUser(firebaseAuth.signInWithEmailAndPassword(email, password), emitter)
+            actionFirebaseAuth(firebaseAuth.signInWithEmailAndPassword(email, password), emitter)
         }
     }
 
-    fun onGoogleSigInClicked(account: GoogleSignInAccount): Completable {
-        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+    fun onGoogleSignInClicked(task: Task<GoogleSignInAccount>) = Completable.create { emitter ->
+        if (!emitter.isDisposed) {
+            getAccountToLogInFirebase(task, emitter)
+        }
+    }
+
+    fun firebaseAuthWithGoogle(idToken: String?): Completable {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
 
         return Completable.create { emitter ->
             if (!emitter.isDisposed) {
-                createOrSigInUser(firebaseAuth.signInWithCredential(credential), emitter)
+                actionFirebaseAuth(firebaseAuth.signInWithCredential(credential), emitter)
             }
         }
     }
 
     fun onResetPasswordClicked(email: String) = Completable.create { emitter ->
         if (!emitter.isDisposed) {
-            resetPassword(firebaseAuth.sendPasswordResetEmail(email), emitter)
+            actionFirebaseAuth(firebaseAuth.sendPasswordResetEmail(email), emitter)
         }
     }
 
@@ -59,8 +69,8 @@ class FirebaseManager {
 
     fun currentUser() = firebaseAuth.currentUser
 
-    private fun createOrSigInUser(
-        nameTask: Task<AuthResult>,
+    private fun <T : Any?> actionFirebaseAuth(
+        nameTask: Task<T>,
         emitter: CompletableEmitter
     ) {
 
@@ -76,26 +86,22 @@ class FirebaseManager {
             Log.w(AppConstants.Tag.LOG_W, "UserWithEmail:failure - ${it.message}", it.cause)
             emitter.onError(it)
         }
-
     }
 
-    private fun resetPassword(
-        nameTask: Task<Void>,
+    private fun <T : Any?> getAccountToLogInFirebase(
+        nameTask: Task<T>,
         emitter: CompletableEmitter
     ) {
+        try {
+            nameTask.getResult(ApiException::class.java)
+            emitter.onComplete()
 
-        nameTask.addOnCompleteListener {
-            if (it.isSuccessful) {
-                Log.d(
-                    AppConstants.Tag.LOG_D,
-                    "Email sent - ${it.result.toString()}"
-                )
-                emitter.onComplete()
-            }
-        }.addOnFailureListener {
-            Log.w(AppConstants.Tag.LOG_W, "UserWithEmail:failure - ${it.message}", it.cause)
-            emitter.onError(it)
+        } catch (e: ApiException) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w(AppConstants.Tag.LOG_W, "signInResult:failed code= ${e.statusCode}")
+            emitter.onError(e)
+
         }
-
     }
 }
