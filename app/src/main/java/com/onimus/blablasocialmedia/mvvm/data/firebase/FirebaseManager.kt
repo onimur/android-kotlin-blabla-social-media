@@ -28,28 +28,21 @@ class FirebaseManager {
         FirebaseAuth.getInstance()
     }
 
-    fun onRegisterClicked(email: String, password: String) = Completable.create { emitter ->
+    fun registerUser(email: String, password: String) = Completable.create { emitter ->
         if (!emitter.isDisposed) {
             actionFirebaseAuth(
-                firebaseAuth.createUserWithEmailAndPassword(email, password),
-                emitter
+                firebaseAuth.createUserWithEmailAndPassword(email, password), emitter
             )
         }
     }
 
-    fun onLoginClicked(email: String, password: String) = Completable.create { emitter ->
+    fun logInUser(email: String, password: String) = Completable.create { emitter ->
         if (!emitter.isDisposed) {
             actionFirebaseAuth(firebaseAuth.signInWithEmailAndPassword(email, password), emitter)
         }
     }
 
-    fun onGoogleSignInClicked(task: Task<GoogleSignInAccount>) = Completable.create { emitter ->
-        if (!emitter.isDisposed) {
-            getAccountToLogInFirebase(task, emitter)
-        }
-    }
-
-    fun firebaseAuthWithGoogle(idToken: String?): Completable {
+    fun logInUser(idToken: String?): Completable {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
 
         return Completable.create { emitter ->
@@ -59,7 +52,13 @@ class FirebaseManager {
         }
     }
 
-    fun onResetPasswordClicked(email: String) = Completable.create { emitter ->
+    fun googleSignInAccount(task: Task<GoogleSignInAccount>) = Completable.create { emitter ->
+        if (!emitter.isDisposed) {
+            getAccountToLogInFirebase(task, emitter)
+        }
+    }
+
+    fun resetPassword(email: String) = Completable.create { emitter ->
         if (!emitter.isDisposed) {
             actionFirebaseAuth(firebaseAuth.sendPasswordResetEmail(email), emitter)
         }
