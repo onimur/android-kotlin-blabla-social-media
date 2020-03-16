@@ -95,12 +95,4 @@ class FirebaseManagerTest {
     @Test
     fun onResetPasswordClicked() {
     }
-
-    @Test
-    fun logout() {
-    }
-
-    @Test
-    fun currentUser() {
-    }
 }
