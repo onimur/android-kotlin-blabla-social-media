@@ -13,14 +13,15 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph.xml"
-    app:startDestination="@id/nav_auth">
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/nav_auth"
+    tools:ignore="UnusedNavigation">
 
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.onimus.blablasocialmedia.mvvm.ui.profile.ProfileFragment"
         android:label="ProfileFragment"
-        tools:layout="@layout/fragment_profile" >
+        tools:layout="@layout/fragment_profile">
         <action
             android:id="@+id/action_profileFragment_to_mainFragment"
             app:destination="@id/nav_auth" />
