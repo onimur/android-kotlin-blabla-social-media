@@ -19,6 +19,8 @@ class TestConstants {
         const val EMAIL = "abc@abc.com"
         const val PASSWORD = "Abc123"
         const val NAME = "José da Silva"
+
+        const val ERROR_MESSAGE = "any error"
     }
 
 
