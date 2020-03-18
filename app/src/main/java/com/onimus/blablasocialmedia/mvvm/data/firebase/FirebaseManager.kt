@@ -93,6 +93,7 @@ class FirebaseManager {
     ) {
         try {
             nameTask.getResult(ApiException::class.java)
+            Log.d(AppConstants.Tag.LOG_D, "firebaseAuthWithGoogle: ${nameTask.result.toString()}")
             emitter.onComplete()
 
         } catch (e: ApiException) {

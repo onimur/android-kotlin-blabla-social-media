@@ -112,8 +112,6 @@ class LoginViewModel(
         //if is valid then show progress
         loginListener?.showProgress()
         //calling repository to perform the actual authentication
-        Log.d(AppConstants.Tag.LOG_D, "firebaseAuthWithGoogle: $idToken")
-
         val completable =
             repository.firebaseAuthWithGoogle(idToken)
 
