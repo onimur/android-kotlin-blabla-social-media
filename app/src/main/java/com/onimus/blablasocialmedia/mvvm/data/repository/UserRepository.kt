@@ -14,6 +14,7 @@ package com.onimus.blablasocialmedia.mvvm.data.repository
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthCredential
 import com.onimus.blablasocialmedia.mvvm.data.firebase.FirebaseManager
 
 class UserRepository(private val firebase: FirebaseManager) {
@@ -26,7 +27,7 @@ class UserRepository(private val firebase: FirebaseManager) {
     fun onGoogleSignInClicked(task: Task<GoogleSignInAccount>) =
         firebase.googleSignInAccount(task)
 
-    fun firebaseAuthWithGoogle(idToken: String?) = firebase.logInUser(idToken)
+    fun firebaseAuthWithGoogle(credential: AuthCredential) = firebase.logInUser(credential)
 
     fun onResetPasswordClicked(email: String) = firebase.resetPassword(email)
 

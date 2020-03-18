@@ -16,8 +16,8 @@ import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
 import com.onimus.blablasocialmedia.mvvm.utils.AppConstants
 import io.reactivex.Completable
 import io.reactivex.CompletableEmitter
@@ -42,8 +42,7 @@ class FirebaseManager {
         }
     }
 
-    fun logInUser(idToken: String?): Completable {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
+    fun logInUser(credential: AuthCredential): Completable {
 
         return Completable.create { emitter ->
             if (!emitter.isDisposed) {

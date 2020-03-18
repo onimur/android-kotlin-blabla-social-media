@@ -20,11 +20,10 @@ import io.mockk.*
 import io.mockk.impl.annotations.MockK
 
 
-class MockkTasksHelper<TResult : Any?> {
+class MockkHelper<TResult : Any?> {
 
     @MockK
-    var task: Task<TResult> = mockk(relaxed = true)
-
+    private var task: Task<TResult> = mockk(relaxed = true)
 
     private val slotComplete = slot<OnCompleteListener<TResult>>()
     private val slotFailure = slot<OnFailureListener>()
@@ -49,6 +48,7 @@ class MockkTasksHelper<TResult : Any?> {
         every { task.isSuccessful } returns value
     }
 
+
     /**
      * Only use after the method you want to capture is triggered.
      * @param failure If the variable is empty then you want to capture the complete slot.
@@ -57,6 +57,5 @@ class MockkTasksHelper<TResult : Any?> {
     fun slotCaptured(failure: Exception? = null) {
         if (failure == null) slotComplete.captured.onComplete(task)
         else slotFailure.captured.onFailure(failure)
-
     }
 }

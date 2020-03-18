@@ -13,9 +13,9 @@
 package com.onimus.blablasocialmedia.mvvm.ui.auth.login
 
 
-import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthCredential
 import com.onimus.blablasocialmedia.mvvm.common.ProgressViewModel
 import com.onimus.blablasocialmedia.mvvm.data.repository.UserRepository
 import com.onimus.blablasocialmedia.mvvm.utils.AppConstants
@@ -55,9 +55,9 @@ class LoginViewModel(
         setActionToGoogleSignIn(task)
     }
 
-    fun firebaseAuthWithGoogle(idToken: String?) {
+    fun firebaseAuthWithGoogle(credential: AuthCredential) {
         //login process
-        setActionToAuthenticationGoogleSignIn(idToken)
+        setActionToAuthenticationGoogleSignIn(credential)
     }
 
     fun onClickTextViewRegister() {
@@ -108,12 +108,12 @@ class LoginViewModel(
         disposables.add(disposable)
     }
 
-    private fun setActionToAuthenticationGoogleSignIn(idToken: String?) {
+    private fun setActionToAuthenticationGoogleSignIn(credential: AuthCredential) {
         //if is valid then show progress
         loginListener?.showProgress()
         //calling repository to perform the actual authentication
         val completable =
-            repository.firebaseAuthWithGoogle(idToken)
+            repository.firebaseAuthWithGoogle(credential)
 
         val disposable = getDisposableOnAuth(completable)
         disposables.add(disposable)

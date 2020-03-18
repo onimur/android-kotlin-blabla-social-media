@@ -14,11 +14,8 @@ package com.onimus.blablasocialmedia.mvvm.data.firebase
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.android.gms.auth.GoogleAuthException
-import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthException
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException
-import com.onimus.blablasocialmedia.mvvm.helper.MockkTasksHelper
+import com.google.firebase.auth.*
+import com.onimus.blablasocialmedia.mvvm.helper.MockkHelper
 import com.onimus.blablasocialmedia.mvvm.helper.TestConstants.Companion.EMAIL
 import com.onimus.blablasocialmedia.mvvm.helper.TestConstants.Companion.ERROR_MESSAGE
 import com.onimus.blablasocialmedia.mvvm.helper.TestConstants.Companion.PASSWORD
@@ -26,6 +23,7 @@ import io.mockk.clearAllMocks
 import io.mockk.impl.annotations.MockK
 import org.junit.After
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -39,23 +37,24 @@ class FirebaseManagerIT {
     @MockK
     private lateinit var mockAuth: FirebaseAuth
 
+    private lateinit var credential: AuthCredential
+
     private lateinit var firebaseManager: FirebaseManager
-    private lateinit var mockkTasksHelper: MockkTasksHelper<AuthResult>
+    private lateinit var mockkHelper: MockkHelper<AuthResult>
 
     private fun setupMocks() {
-        mockkTasksHelper = MockkTasksHelper()
+        mockkHelper = MockkHelper()
         mockAuth = FirebaseAuth.getInstance()
+        credential = GoogleAuthProvider.getCredential(anyString(), null)
         firebaseManager = FirebaseManager()
 
-        mockkTasksHelper.initializeMockks({
-            mockAuth.createUserWithEmailAndPassword(
-                EMAIL,
-                PASSWORD
-            )
-        })
+        mockkHelper
+            .initializeMockks({ mockAuth.createUserWithEmailAndPassword(EMAIL, PASSWORD) },
+                { mockAuth.signInWithEmailAndPassword(EMAIL, PASSWORD) },
+                { mockAuth.signInWithCredential(credential) })
 
         //observer
-        mockkTasksHelper.initializeCapture()
+        mockkHelper.initializeCapture()
     }
 
     @Before
@@ -70,26 +69,28 @@ class FirebaseManagerIT {
 
     @Test
     fun `registerUser should be isSuccessful`() {
-        mockkTasksHelper.taskSuccessful()
+        mockkHelper.taskSuccessful()
         val register = firebaseManager.registerUser(EMAIL, PASSWORD).test()
 
         //check capture
-        mockkTasksHelper.slotCaptured()
+        mockkHelper.slotCaptured()
         with(register) {
             assertSubscribed()
             assertComplete()
             assertNoErrors()
             assertFalse(isDisposed)
+            dispose()
+            assertTrue(isDisposed)
         }
     }
 
     @Test
     fun `registerUser with task it's unsuccessful should be empty`() {
-        mockkTasksHelper.taskSuccessful(false)
+        mockkHelper.taskSuccessful(false)
         val register = firebaseManager.registerUser(EMAIL, PASSWORD).test()
 
         //check capture
-        mockkTasksHelper.slotCaptured()
+        mockkHelper.slotCaptured()
         with(register) {
             assertEmpty()
             assertFalse(isDisposed)
@@ -101,8 +102,14 @@ class FirebaseManagerIT {
         val register = firebaseManager.registerUser(EMAIL, PASSWORD).test()
 
         //check capture
-        mockkTasksHelper
-            .slotCaptured(FirebaseAuthWeakPasswordException(anyString(), ERROR_MESSAGE, anyString()))
+        mockkHelper
+            .slotCaptured(
+                FirebaseAuthWeakPasswordException(
+                    anyString(),
+                    ERROR_MESSAGE,
+                    anyString()
+                )
+            )
 
         with(register) {
             assertSubscribed()
@@ -116,7 +123,7 @@ class FirebaseManagerIT {
         val register = firebaseManager.registerUser(EMAIL, PASSWORD).test()
 
         //check capture
-        mockkTasksHelper
+        mockkHelper
             .slotCaptured(GoogleAuthException(ERROR_MESSAGE))
 
         with(register) {
@@ -127,11 +134,125 @@ class FirebaseManagerIT {
     }
 
     @Test
-    fun logInUser() {
+    fun `loginUser with Email and Password should be isSuccessful`() {
+        mockkHelper.taskSuccessful()
+        val login = firebaseManager.logInUser(EMAIL, PASSWORD).test()
+
+        //check capture
+        mockkHelper.slotCaptured()
+        with(login) {
+            assertSubscribed()
+            assertComplete()
+            assertNoErrors()
+            assertFalse(isDisposed)
+        }
     }
 
     @Test
-    fun testLogInUser() {
+    fun `loginUser with Email and Password with task it's unsuccessful should be empty`() {
+        mockkHelper.taskSuccessful(false)
+        val login = firebaseManager.logInUser(EMAIL, PASSWORD).test()
+
+        //check capture
+        mockkHelper.slotCaptured()
+        with(login) {
+            assertEmpty()
+            assertFalse(isDisposed)
+        }
+    }
+
+    @Test
+    fun `loginUser with Email and Password should be return error with FirebaseAuthException`() {
+        val login = firebaseManager.logInUser(EMAIL, PASSWORD).test()
+
+        //check capture
+        mockkHelper
+            .slotCaptured(
+                FirebaseAuthWeakPasswordException(
+                    anyString(),
+                    ERROR_MESSAGE,
+                    anyString()
+                )
+            )
+
+        with(login) {
+            assertSubscribed()
+            assertFailureAndMessage(FirebaseAuthException::class.java, ERROR_MESSAGE)
+            assertFalse(isDisposed)
+        }
+    }
+
+    @Test
+    fun `loginUser with Email and Password should be return Exception`() {
+        val login = firebaseManager.logInUser(EMAIL, PASSWORD).test()
+
+        //check capture
+        mockkHelper
+            .slotCaptured(GoogleAuthException(ERROR_MESSAGE))
+
+        with(login) {
+            assertSubscribed()
+            assertFailureAndMessage(Exception::class.java, ERROR_MESSAGE)
+            assertFalse(isDisposed)
+        }
+    }
+
+    @Test
+    fun `loginUser with idToken should be isSuccessful`() {
+        mockkHelper.taskSuccessful()
+        val login = firebaseManager.logInUser(credential).test()
+
+        //check capture
+        mockkHelper.slotCaptured()
+        with(login) {
+            assertSubscribed()
+            assertComplete()
+            assertNoErrors()
+            assertFalse(isDisposed)
+        }
+    }
+
+    @Test
+    fun `loginUser with idToken with task it's unsuccessful should be empty`() {
+        mockkHelper.taskSuccessful(false)
+        val login = firebaseManager.logInUser(credential).test()
+
+        //check capture
+        mockkHelper.slotCaptured()
+        with(login) {
+            assertEmpty()
+            assertFalse(isDisposed)
+        }
+    }
+
+    @Test
+    fun `loginUser with idToken should be return error with FirebaseAuthException`() {
+        val login = firebaseManager.logInUser(credential).test()
+
+        //check capture
+        mockkHelper
+            .slotCaptured(FirebaseAuthWebException(anyString(), ERROR_MESSAGE))
+
+        with(login) {
+            assertSubscribed()
+            assertFailureAndMessage(FirebaseAuthException::class.java, ERROR_MESSAGE)
+            assertFalse(isDisposed)
+        }
+    }
+
+    @Test
+    fun `loginUser with idToken should be return Exception`() {
+        val login = firebaseManager.logInUser(credential).test()
+
+        //check capture
+        mockkHelper
+            .slotCaptured(GoogleAuthException(ERROR_MESSAGE))
+
+        with(login) {
+            assertSubscribed()
+            assertFailureAndMessage(Exception::class.java, ERROR_MESSAGE)
+            assertFalse(isDisposed)
+        }
     }
 
     @Test

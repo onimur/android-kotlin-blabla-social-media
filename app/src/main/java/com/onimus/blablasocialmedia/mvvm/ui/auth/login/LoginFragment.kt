@@ -26,6 +26,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.GoogleAuthProvider
 import com.onimus.blablasocialmedia.R
 import com.onimus.blablasocialmedia.databinding.FragmentLoginBinding
 import com.onimus.blablasocialmedia.mvvm.data.google.GoogleSignInManager
@@ -124,9 +125,10 @@ class LoginFragment : Fragment(), KodeinAware, LoginListener {
      */
     override fun onSuccessGoogleSign() {
         val account = task.result
+        val credential = GoogleAuthProvider.getCredential(account?.idToken, null)
         //set google email
         viewModel.email = account?.email
-        viewModel.firebaseAuthWithGoogle(account?.idToken)
+        viewModel.firebaseAuthWithGoogle(credential)
     }
 
     override fun onClickTextViewRegister() {
