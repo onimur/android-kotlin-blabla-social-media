@@ -13,13 +13,12 @@
 package com.onimus.blablasocialmedia.mvvm.data.firebase
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.onimus.blablasocialmedia.mvvm.helper.MockkTasksHelper
 import com.onimus.blablasocialmedia.mvvm.helper.TestConstants.Companion.EMAIL
 import com.onimus.blablasocialmedia.mvvm.helper.TestConstants.Companion.PASSWORD
-import io.mockk.*
+import io.mockk.clearAllMocks
 import io.mockk.impl.annotations.MockK
 import org.junit.After
 import org.junit.Assert.assertFalse
@@ -28,41 +27,32 @@ import org.junit.Rule
 import org.junit.Test
 
 class FirebaseManagerIT {
+
     @get:Rule
     val rule = InstantTaskExecutorRule()
-
-    private lateinit var firebaseManager: FirebaseManager
 
     @MockK
     private lateinit var mockAuth: FirebaseAuth
 
-    @MockK
-    var mockAuthTask: Task<AuthResult> = mockk(relaxed = true)
-
-    private val slotCompleteListener = slot<OnCompleteListener<AuthResult>>()
+    private lateinit var firebaseManager: FirebaseManager
+    private lateinit var mockkTasksHelper: MockkTasksHelper<AuthResult>
 
     private fun setupMocks() {
+        mockkTasksHelper = MockkTasksHelper()
         mockAuth = FirebaseAuth.getInstance()
         firebaseManager = FirebaseManager()
 
-        every {
-            mockAuth.createUserWithEmailAndPassword(
-                EMAIL,
-                PASSWORD
-            )
-        } returns mockAuthTask
+        mockkTasksHelper.initializeMockks({mockAuth.createUserWithEmailAndPassword(
+            EMAIL,
+            PASSWORD
+        )})
 
-
-        every { mockAuthTask.addOnCompleteListener(capture(slotCompleteListener)) } returns mockAuthTask
-
+        //observer
+        mockkTasksHelper.initializeCapture()
     }
 
     @Before
     fun setUp() {
-        MockKAnnotations.init(this)
-        mockkStatic(FirebaseAuth::class)
-        every { FirebaseAuth.getInstance() } returns mockk(relaxed = true)
-
         setupMocks()
     }
 
@@ -73,19 +63,17 @@ class FirebaseManagerIT {
 
     @Test
     fun registerUser() {
-        every { mockAuthTask.isSuccessful } returns true
+        mockkTasksHelper.taskSuccessful()
         val register = firebaseManager.registerUser(EMAIL, PASSWORD).test()
 
-
-        slotCompleteListener.captured.onComplete(mockAuthTask)
+        //check capture
+        mockkTasksHelper.slotCaptured()
         with(register) {
             hasSubscription()
             assertComplete()
             assertNoErrors()
             assertFalse(isDisposed)
-
         }
-
     }
 
     @Test
