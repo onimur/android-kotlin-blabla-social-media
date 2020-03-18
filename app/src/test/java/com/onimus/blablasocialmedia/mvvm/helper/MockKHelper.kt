@@ -20,7 +20,7 @@ import io.mockk.*
 import io.mockk.impl.annotations.MockK
 
 
-class MockkHelper<TResult : Any?> {
+class MockKHelper<TResult : Any?> {
 
     @MockK
     private var task: Task<TResult> = mockk(relaxed = true)
