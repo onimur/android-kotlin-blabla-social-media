@@ -48,12 +48,10 @@ class MockKHelper<TResult : Any?> {
         every { task.isSuccessful } returns value
     }
 
-
     /**
      * Only use after the method you want to capture is triggered.
      * @param failure If the variable is empty then you want to capture the complete slot.
      */
-
     fun slotCaptured(failure: Exception? = null) {
         if (failure == null) slotComplete.captured.onComplete(task)
         else slotFailure.captured.onFailure(failure)

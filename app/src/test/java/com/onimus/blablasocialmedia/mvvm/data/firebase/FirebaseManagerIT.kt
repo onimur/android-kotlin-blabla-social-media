@@ -94,6 +94,8 @@ class FirebaseManagerIT {
         with(register) {
             assertEmpty()
             assertFalse(isDisposed)
+            dispose()
+            assertTrue(isDisposed)
         }
     }
 
@@ -115,6 +117,8 @@ class FirebaseManagerIT {
             assertSubscribed()
             assertFailureAndMessage(FirebaseAuthException::class.java, ERROR_MESSAGE)
             assertFalse(isDisposed)
+            dispose()
+            assertTrue(isDisposed)
         }
     }
 
@@ -130,6 +134,8 @@ class FirebaseManagerIT {
             assertSubscribed()
             assertFailureAndMessage(Exception::class.java, ERROR_MESSAGE)
             assertFalse(isDisposed)
+            dispose()
+            assertTrue(isDisposed)
         }
     }
 
@@ -145,6 +151,8 @@ class FirebaseManagerIT {
             assertComplete()
             assertNoErrors()
             assertFalse(isDisposed)
+            dispose()
+            assertTrue(isDisposed)
         }
     }
 
@@ -158,6 +166,8 @@ class FirebaseManagerIT {
         with(login) {
             assertEmpty()
             assertFalse(isDisposed)
+            dispose()
+            assertTrue(isDisposed)
         }
     }
 
@@ -179,6 +189,8 @@ class FirebaseManagerIT {
             assertSubscribed()
             assertFailureAndMessage(FirebaseAuthException::class.java, ERROR_MESSAGE)
             assertFalse(isDisposed)
+            dispose()
+            assertTrue(isDisposed)
         }
     }
 
@@ -194,6 +206,8 @@ class FirebaseManagerIT {
             assertSubscribed()
             assertFailureAndMessage(Exception::class.java, ERROR_MESSAGE)
             assertFalse(isDisposed)
+            dispose()
+            assertTrue(isDisposed)
         }
     }
 
@@ -209,6 +223,8 @@ class FirebaseManagerIT {
             assertComplete()
             assertNoErrors()
             assertFalse(isDisposed)
+            dispose()
+            assertTrue(isDisposed)
         }
     }
 
@@ -222,6 +238,8 @@ class FirebaseManagerIT {
         with(login) {
             assertEmpty()
             assertFalse(isDisposed)
+            dispose()
+            assertTrue(isDisposed)
         }
     }
 
@@ -237,6 +255,8 @@ class FirebaseManagerIT {
             assertSubscribed()
             assertFailureAndMessage(FirebaseAuthException::class.java, ERROR_MESSAGE)
             assertFalse(isDisposed)
+            dispose()
+            assertTrue(isDisposed)
         }
     }
 
@@ -252,6 +272,8 @@ class FirebaseManagerIT {
             assertSubscribed()
             assertFailureAndMessage(Exception::class.java, ERROR_MESSAGE)
             assertFalse(isDisposed)
+            dispose()
+            assertTrue(isDisposed)
         }
     }
 
