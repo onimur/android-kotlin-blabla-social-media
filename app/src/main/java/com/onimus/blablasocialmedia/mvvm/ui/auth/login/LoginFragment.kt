@@ -44,13 +44,13 @@ class LoginFragment : Fragment(), KodeinAware, LoginListener {
     override val kodein by kodein()
     private val progressBar: ProgressDialog by lazy {
         ProgressDialog(
-            context!!,
+            requireContext(),
             R.string.validating
         )
     }
 
     private val googleSignInManager by lazy {
-        GoogleSignInManager(context!!)
+        GoogleSignInManager(requireContext())
     }
 
     private val factory: LoginViewModelFactory by instance()
@@ -111,13 +111,13 @@ class LoginFragment : Fragment(), KodeinAware, LoginListener {
     }
 
     override fun onSuccessAuth() {
-        context?.toast("${getString(R.string.login_email)}: ${viewModel.email}")
+        requireContext().toast("${getString(R.string.login_email)}: ${viewModel.email}")
         actionNav = LoginFragmentDirections.actionLoginFragmentToProfileFragment()
         findNavController().navigate(actionNav)
     }
 
     override fun onFailureAuth(resId: Int) {
-        context?.toast("${getString(R.string.authentication_failed)}: ${getString(resId)}")
+        requireContext().toast("${getString(R.string.authentication_failed)}: ${getString(resId)}")
     }
 
     /**

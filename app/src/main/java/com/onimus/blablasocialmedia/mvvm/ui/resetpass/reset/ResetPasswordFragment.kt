@@ -23,7 +23,7 @@ class ResetPasswordFragment : Fragment(), KodeinAware, ResetListener {
 
     override val kodein by kodein()
 
-    private val progressBar: ProgressDialog by lazy { ProgressDialog(context!!, R.string.sending) }
+    private val progressBar: ProgressDialog by lazy { ProgressDialog(requireContext(), R.string.sending) }
 
     private val factory: ResetViewModelFactory by instance()
 
@@ -59,13 +59,13 @@ class ResetPasswordFragment : Fragment(), KodeinAware, ResetListener {
     }
 
     override fun onSuccessAuth() {
-        context?.toast("${getString(R.string.email_sent_to)}: ${viewModel.email}")
+        requireContext().toast("${getString(R.string.email_sent_to)}: ${viewModel.email}")
         actionNav = ResetPasswordFragmentDirections.actionResetPasswordFragmentToSuccessSendingEmailFragment()
         findNavController().navigate(actionNav)
     }
 
     override fun onFailureAuth(resId: Int) {
-        context?.toast("${getString(R.string.error_send_email)}: ${getString(resId)}")
+        requireContext().toast("${getString(R.string.error_send_email)}: ${getString(resId)}")
     }
 
     override fun inEmailValidationError(resId: Int) {

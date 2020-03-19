@@ -35,7 +35,7 @@ class RegisterFragment : Fragment(), KodeinAware, RegisterListener {
 
     override val kodein by kodein()
 
-    private val progressBar: ProgressDialog by lazy { ProgressDialog(context!!, R.string.validating) }
+    private val progressBar: ProgressDialog by lazy { ProgressDialog(requireContext(), R.string.validating) }
 
     private val factory: RegisterViewModelFactory by instance()
 
@@ -79,13 +79,13 @@ class RegisterFragment : Fragment(), KodeinAware, RegisterListener {
     }
 
     override fun onSuccessAuth() {
-        context?.toast("${getString(R.string.registered_email)}: ${viewModel.email}")
+        requireContext().toast("${getString(R.string.registered_email)}: ${viewModel.email}")
         actionNav = RegisterFragmentDirections.actionRegisterFragmentToProfileFragment()
         findNavController().navigate(actionNav)
     }
 
     override fun onFailureAuth(resId: Int) {
-        context?.toast("${getString(R.string.authentication_failed)}: ${getString(resId)}")
+        requireContext().toast("${getString(R.string.authentication_failed)}: ${getString(resId)}")
     }
 
     override fun onNavigate() {
