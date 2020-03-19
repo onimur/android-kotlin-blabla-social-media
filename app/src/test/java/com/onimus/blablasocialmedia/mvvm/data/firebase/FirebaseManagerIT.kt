@@ -49,7 +49,7 @@ class FirebaseManagerIT {
         firebaseManager = FirebaseManager()
 
         mockKHelper
-            .initializeMockks({ mockAuth.createUserWithEmailAndPassword(EMAIL, PASSWORD) },
+            .initializeMockKs({ mockAuth.createUserWithEmailAndPassword(EMAIL, PASSWORD) },
                 { mockAuth.signInWithEmailAndPassword(EMAIL, PASSWORD) },
                 { mockAuth.signInWithCredential(credential) })
 

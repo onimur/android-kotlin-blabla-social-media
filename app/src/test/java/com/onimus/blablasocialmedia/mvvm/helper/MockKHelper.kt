@@ -20,7 +20,7 @@ import io.mockk.*
 import io.mockk.impl.annotations.MockK
 
 
-class MockKHelper<TResult : Any?> {
+class MockKHelper<TResult : Any?>{
 
     @MockK
     private var task: Task<TResult> = mockk(relaxed = true)
@@ -35,7 +35,7 @@ class MockKHelper<TResult : Any?> {
         every { FirebaseAuth.getInstance() } returns mockk(relaxed = true)
     }
 
-    fun initializeMockks(vararg mockTask: () -> Task<TResult>) {
+    fun initializeMockKs(vararg mockTask: () -> Task<TResult>) {
         mockTask.forEach { every { it.invoke() } returns task }
     }
 
