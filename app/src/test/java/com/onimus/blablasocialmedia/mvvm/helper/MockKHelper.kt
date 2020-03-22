@@ -15,27 +15,17 @@ package com.onimus.blablasocialmedia.mvvm.helper
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FirebaseAuth
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 
 
-class MockKHelper<TResult : Any?>(initAnnotation: Boolean = true){
+class MockKHelper<TResult : Any?>{
 
     @MockK
     private var task: Task<TResult> = mockk(relaxed = true)
 
     private val slotComplete = slot<OnCompleteListener<TResult>>()
     private val slotFailure = slot<OnFailureListener>()
-
-
-    init {
-        if(initAnnotation){
-            MockKAnnotations.init(this)
-            mockkStatic(FirebaseAuth::class)
-            every { FirebaseAuth.getInstance() } returns mockk(relaxed = true)
-        }
-    }
 
     fun initializeMockKs(vararg mockTask: () -> Task<TResult>) {
         mockTask.forEach { every { it.invoke() } returns task }

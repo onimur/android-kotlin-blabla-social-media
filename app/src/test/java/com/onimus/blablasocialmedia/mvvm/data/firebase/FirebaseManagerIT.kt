@@ -21,11 +21,8 @@ import com.onimus.blablasocialmedia.mvvm.helper.MockKHelper
 import com.onimus.blablasocialmedia.mvvm.helper.TestConstants.Companion.EMAIL
 import com.onimus.blablasocialmedia.mvvm.helper.TestConstants.Companion.ERROR_MESSAGE
 import com.onimus.blablasocialmedia.mvvm.helper.TestConstants.Companion.PASSWORD
-import io.mockk.clearAllMocks
-import io.mockk.every
+import io.mockk.*
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockk
-import io.mockk.unmockkAll
 import org.junit.*
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -45,40 +42,51 @@ class FirebaseManagerIT {
 
     @MockK
     private lateinit var mockAuth: FirebaseAuth
-
-    private lateinit var credential: AuthCredential
-
-    private lateinit var firebaseManager: FirebaseManager
-
     @MockK
-    private var googleTasks: Task<GoogleSignInAccount> = mockk(relaxed = true)
+    private var mockGoogleTasks: Task<GoogleSignInAccount> = mockk(relaxed = true)
     private lateinit var mockKAuthResult: MockKHelper<AuthResult>
     private lateinit var mockKVoid: MockKHelper<Void>
 
-    private fun setupMocks() {
-        mockKAuthResult = MockKHelper()
-        mockKVoid = MockKHelper(false)
-        mockAuth = FirebaseAuth.getInstance()
+    private lateinit var credential: AuthCredential
+    private lateinit var firebaseManager: FirebaseManager
 
-        //googleTasks = Tasks.forResult(GoogleSignInAccount.createDefault())
+    private fun initAnnotation() {
+        MockKAnnotations.init(this)
+        mockkStatic(FirebaseAuth::class)
+        every { FirebaseAuth.getInstance() } returns mockk(relaxed = true)
+    }
+
+    private fun initVariables() {
+        mockAuth = FirebaseAuth.getInstance()
         credential = GoogleAuthProvider.getCredential(anyString(), null)
         firebaseManager = FirebaseManager()
+    }
 
+    private fun setupMockVoid() {
+        mockKVoid = MockKHelper()
+        mockKVoid.initializeMockKs({mockAuth.sendPasswordResetEmail(EMAIL)})
+
+        //observer
+        mockKVoid.initializeCapture()
+    }
+
+    private fun setupMockAuthResult() {
+        mockKAuthResult = MockKHelper()
         mockKAuthResult
             .initializeMockKs({ mockAuth.createUserWithEmailAndPassword(EMAIL, PASSWORD) },
                 { mockAuth.signInWithEmailAndPassword(EMAIL, PASSWORD) },
                 { mockAuth.signInWithCredential(credential) })
 
-        mockKVoid.initializeMockKs({mockAuth.sendPasswordResetEmail(EMAIL)})
-
         //observer
         mockKAuthResult.initializeCapture()
-        mockKVoid.initializeCapture()
     }
 
     @Before
     fun setUp() {
-        setupMocks()
+        initAnnotation()
+        initVariables()
+        setupMockAuthResult()
+        setupMockVoid()
     }
 
     @After
@@ -298,7 +306,7 @@ class FirebaseManagerIT {
 
     @Test
     fun `googleSignInAccount with valid Credential should complete the task `() {
-        val googleSignIn = firebaseManager.googleSignInAccount(googleTasks).test()
+        val googleSignIn = firebaseManager.googleSignInAccount(mockGoogleTasks).test()
 
         with(googleSignIn) {
             assertSubscribed()
@@ -312,8 +320,8 @@ class FirebaseManagerIT {
 
     @Test
     fun `googleSignInAccount with GoogleAuthException should be return Exception`() {
-        every { googleTasks.result } throws GoogleAuthException(ERROR_MESSAGE)
-        val googleSignIn = firebaseManager.googleSignInAccount(googleTasks).test()
+        every { mockGoogleTasks.result } throws GoogleAuthException(ERROR_MESSAGE)
+        val googleSignIn = firebaseManager.googleSignInAccount(mockGoogleTasks).test()
 
         with(googleSignIn) {
             assertSubscribed()
