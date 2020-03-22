@@ -20,7 +20,7 @@ import io.mockk.*
 import io.mockk.impl.annotations.MockK
 
 
-class MockKHelper<TResult : Any?>{
+class MockKHelper<TResult : Any?>(initAnnotation: Boolean = true){
 
     @MockK
     private var task: Task<TResult> = mockk(relaxed = true)
@@ -30,9 +30,11 @@ class MockKHelper<TResult : Any?>{
 
 
     init {
-        MockKAnnotations.init(this)
-        mockkStatic(FirebaseAuth::class)
-        every { FirebaseAuth.getInstance() } returns mockk(relaxed = true)
+        if(initAnnotation){
+            MockKAnnotations.init(this)
+            mockkStatic(FirebaseAuth::class)
+            every { FirebaseAuth.getInstance() } returns mockk(relaxed = true)
+        }
     }
 
     fun initializeMockKs(vararg mockTask: () -> Task<TResult>) {
