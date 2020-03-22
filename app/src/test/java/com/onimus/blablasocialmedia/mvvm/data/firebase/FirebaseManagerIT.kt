@@ -14,13 +14,17 @@ package com.onimus.blablasocialmedia.mvvm.data.firebase
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.android.gms.auth.GoogleAuthException
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.*
 import com.onimus.blablasocialmedia.mvvm.helper.MockKHelper
 import com.onimus.blablasocialmedia.mvvm.helper.TestConstants.Companion.EMAIL
 import com.onimus.blablasocialmedia.mvvm.helper.TestConstants.Companion.ERROR_MESSAGE
 import com.onimus.blablasocialmedia.mvvm.helper.TestConstants.Companion.PASSWORD
 import io.mockk.clearAllMocks
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -40,11 +44,16 @@ class FirebaseManagerIT {
     private lateinit var credential: AuthCredential
 
     private lateinit var firebaseManager: FirebaseManager
+
+    @MockK
+    private var googleTasks: Task<GoogleSignInAccount> = mockk(relaxed = true)
     private lateinit var mockKHelper: MockKHelper<AuthResult>
 
     private fun setupMocks() {
         mockKHelper = MockKHelper()
         mockAuth = FirebaseAuth.getInstance()
+
+        //googleTasks = Tasks.forResult(GoogleSignInAccount.createDefault())
         credential = GoogleAuthProvider.getCredential(anyString(), null)
         firebaseManager = FirebaseManager()
 
@@ -278,7 +287,31 @@ class FirebaseManagerIT {
     }
 
     @Test
-    fun googleSignInAccount() {
+    fun `googleSignInAccount with valid Credential should complete the task `() {
+        val googleSignIn = firebaseManager.googleSignInAccount(googleTasks).test()
+
+        with(googleSignIn) {
+            assertSubscribed()
+            assertComplete()
+            assertNoErrors()
+            assertFalse(isDisposed)
+            dispose()
+            assertTrue(isDisposed)
+        }
+    }
+
+    @Test
+    fun `googleSignInAccount with GoogleAuthException should be return Exception`() {
+        every { googleTasks.result } throws GoogleAuthException(ERROR_MESSAGE)
+        val googleSignIn = firebaseManager.googleSignInAccount(googleTasks).test()
+
+        with(googleSignIn) {
+            assertSubscribed()
+            assertFailureAndMessage(Exception::class.java, ERROR_MESSAGE)
+            assertFalse(isDisposed)
+            dispose()
+            assertTrue(isDisposed)
+        }
     }
 
     @Test
