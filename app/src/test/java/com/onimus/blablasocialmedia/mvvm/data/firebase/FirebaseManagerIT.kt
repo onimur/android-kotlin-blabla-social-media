@@ -12,7 +12,6 @@
 
 package com.onimus.blablasocialmedia.mvvm.data.firebase
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.android.gms.auth.GoogleAuthException
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
@@ -23,9 +22,12 @@ import com.onimus.blablasocialmedia.mvvm.helper.TestConstants.Companion.ERROR_ME
 import com.onimus.blablasocialmedia.mvvm.helper.TestConstants.Companion.PASSWORD
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
-import org.junit.*
+import org.junit.After
+import org.junit.AfterClass
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Test
 import org.mockito.ArgumentMatchers.anyString
 
 class FirebaseManagerIT {
@@ -36,9 +38,6 @@ class FirebaseManagerIT {
             unmockkAll()
         }
     }
-
-    @get:Rule
-    val rule = InstantTaskExecutorRule()
 
     @MockK
     private lateinit var mockAuth: FirebaseAuth

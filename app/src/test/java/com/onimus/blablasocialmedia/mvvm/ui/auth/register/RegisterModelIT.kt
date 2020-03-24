@@ -12,7 +12,6 @@
 
 package com.onimus.blablasocialmedia.mvvm.ui.auth.register
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.Task
@@ -29,20 +28,15 @@ import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 
 
 class RegisterModelIT {
 
-
     companion object {
         const val CORRECT_EMAIL = "mur@gmail.com"
         const val CORRECT_PASSWORD = "Abc123"
     }
-
-    @get:Rule
-    val rule = InstantTaskExecutorRule()
 
     private lateinit var registerViewModel: RegisterViewModel
     @MockK
