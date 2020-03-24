@@ -87,7 +87,7 @@ class LoginViewModel(
                 loginListener?.showProgress()
                 //calling repository to perform the actual authentication
                 val completable =
-                    repository.onLoginClicked(email!!, password!!)
+                    repository.logInUser(email!!, password!!)
 
                 val disposable = getDisposableOnAuth(completable)
                 disposables.add(disposable)
@@ -102,7 +102,7 @@ class LoginViewModel(
     private fun setActionToGoogleSignIn(task: Task<GoogleSignInAccount>) {
         //calling the repository to retrieve user information on the google account.
         val completable =
-            repository.onGoogleSignInClicked(task)
+            repository.googleSignIn(task)
 
         val disposable = getDisposableOnGoogleSignIn(completable)
         disposables.add(disposable)
@@ -113,7 +113,7 @@ class LoginViewModel(
         loginListener?.showProgress()
         //calling repository to perform the actual authentication
         val completable =
-            repository.firebaseAuthWithGoogle(credential)
+            repository.logInUser(credential)
 
         val disposable = getDisposableOnAuth(completable)
         disposables.add(disposable)

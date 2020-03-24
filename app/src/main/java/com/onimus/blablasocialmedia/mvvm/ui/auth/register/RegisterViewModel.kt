@@ -67,7 +67,7 @@ class RegisterViewModel(
                 //if is valid then show progress
                 registerListener?.showProgress()
                 //calling repository to perform the actual authentication
-                val completable = repository.onRegisterClicked(email!!, password!!)
+                val completable = repository.registerUser(email!!, password!!)
                 val disposable = getDisposable(completable)
                 disposables.add(disposable)
             }

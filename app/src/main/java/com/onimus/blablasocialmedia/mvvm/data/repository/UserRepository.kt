@@ -19,17 +19,17 @@ import com.onimus.blablasocialmedia.mvvm.data.firebase.FirebaseManager
 
 class UserRepository(private val firebase: FirebaseManager) {
 
-    fun onRegisterClicked(email: String, password: String) =
+    fun registerUser(email: String, password: String) =
         firebase.registerUser(email, password)
 
-    fun onLoginClicked(email: String, password: String) = firebase.logInUser(email, password)
+    fun logInUser(email: String, password: String) = firebase.logInUser(email, password)
 
-    fun onGoogleSignInClicked(task: Task<GoogleSignInAccount>) =
+    fun logInUser(credential: AuthCredential) = firebase.logInUser(credential)
+
+    fun googleSignIn(task: Task<GoogleSignInAccount>) =
         firebase.googleSignInAccount(task)
 
-    fun firebaseAuthWithGoogle(credential: AuthCredential) = firebase.logInUser(credential)
-
-    fun onResetPasswordClicked(email: String) = firebase.resetPassword(email)
+    fun resetPassword(email: String) = firebase.resetPassword(email)
 
     fun currentUser() = firebase.currentUser()
 

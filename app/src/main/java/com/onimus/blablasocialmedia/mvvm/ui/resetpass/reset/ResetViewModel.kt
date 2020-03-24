@@ -60,7 +60,7 @@ class ResetViewModel(
                 //if is valid then show progress
                 resetListener?.showProgress()
                 //calling repository to perform the actual authentication
-                val disposable = getDisposable(repository.onResetPasswordClicked(email!!))
+                val disposable = getDisposable(repository.resetPassword(email!!))
                 disposables.add(disposable)
             }
             else -> resetListener?.inEmailValidationError(checkEmail)
