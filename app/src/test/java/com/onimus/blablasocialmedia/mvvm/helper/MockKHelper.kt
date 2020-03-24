@@ -15,11 +15,13 @@ package com.onimus.blablasocialmedia.mvvm.helper
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.Task
-import io.mockk.*
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
+import io.mockk.slot
 
 
-class MockKHelper<TResult : Any?>{
+class MockKHelper<TResult>{
 
     @MockK
     private var task: Task<TResult> = mockk(relaxed = true)
