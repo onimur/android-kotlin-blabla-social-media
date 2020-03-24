@@ -20,7 +20,7 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
     var profileListener: ProfileListener? = null
 
     val user by lazy {
-        repository.currentUser()
+        repository.currentUser
     }
 
     fun checkUserStatus() {

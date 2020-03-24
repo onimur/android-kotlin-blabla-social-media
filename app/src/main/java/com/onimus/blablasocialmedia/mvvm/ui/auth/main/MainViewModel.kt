@@ -20,7 +20,7 @@ class MainViewModel (private val repository: UserRepository) : ViewModel() {
     var mainListener: MainListener? = null
 
     private val user by lazy {
-        repository.currentUser()
+        repository.currentUser
     }
 
     fun checkUserStatus() {
