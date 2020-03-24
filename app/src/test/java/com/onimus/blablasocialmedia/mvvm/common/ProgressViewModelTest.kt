@@ -21,6 +21,7 @@ import org.junit.Test
 class ProgressViewModelTest {
 
     @get:Rule
+    //rule for livedata
     val rule = InstantTaskExecutorRule()
 
     private var progressViewModelHelper : ProgressViewModelHelper = ProgressViewModelHelper()
