@@ -14,7 +14,7 @@ package com.onimus.blablasocialmedia.mvvm.ui.auth.register
 
 import com.onimus.blablasocialmedia.mvvm.common.ProgressViewModel
 import com.onimus.blablasocialmedia.mvvm.data.repository.UserRepository
-import com.onimus.blablasocialmedia.mvvm.utils.AppConstants
+import com.onimus.blablasocialmedia.mvvm.exception.*
 import com.onimus.blablasocialmedia.mvvm.utils.HandleErrors
 import io.reactivex.Completable
 import io.reactivex.Scheduler
@@ -56,26 +56,12 @@ class RegisterViewModel(
      */
     private fun setActionToAuthenticationButton() {
         registerListener?.resetTextInputLayout()
-        //validate email and password
-        val checkEmail = handleErrors.checkEmail(email)
-        val checkPassword = handleErrors.checkPassword(password)
 
-        //email and password is valid
-        when {
-            checkEmail.and(checkPassword) == AppConstants.VALID -> {
-                registerListener?.resetTextInputLayout()
-                //if is valid then show progress
-                registerListener?.showProgress()
-                //calling repository to perform the actual authentication
-                val completable = repository.registerUser(email!!, password!!)
-                val disposable = getDisposable(completable)
-                disposables.add(disposable)
-            }
-            checkEmail != AppConstants.VALID -> registerListener?.inEmailValidationError(checkEmail)
-            checkPassword != AppConstants.VALID -> registerListener?.inPasswordValidationError(
-                checkPassword
-            )
-        }
+        registerListener?.showProgress()
+        //calling repository to perform the actual authentication
+        val completable = repository.registerUser(email, password)
+        val disposable = getDisposable(completable)
+        disposables.add(disposable)
     }
 
     private fun getDisposable(completable: Completable): Disposable {
@@ -88,9 +74,18 @@ class RegisterViewModel(
             }, {
 
                 registerListener?.hideProgress()
+
                 val error = handleErrors.getMessageError(it)
-                //show message
-                registerListener?.onFailureAuth(error)
+
+                when (it) {
+                    //Show message in text input
+                    is EmailException -> registerListener?.inEmailValidationError(error)
+                    //Show message in text input
+                    is PasswordException -> registerListener?.inPasswordValidationError(error)
+                    //show message
+                    else -> registerListener?.onFailureAuth(error)
+
+                }
             })
     }
 
