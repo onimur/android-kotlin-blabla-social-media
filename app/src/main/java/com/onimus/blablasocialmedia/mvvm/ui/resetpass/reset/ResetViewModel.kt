@@ -12,15 +12,12 @@
 
 package com.onimus.blablasocialmedia.mvvm.ui.resetpass.reset
 
-import com.onimus.blablasocialmedia.mvvm.common.ProgressViewModel
+import com.onimus.blablasocialmedia.mvvm.common.AuthenticationViewModel
 import com.onimus.blablasocialmedia.mvvm.data.repository.UserRepository
-import com.onimus.blablasocialmedia.mvvm.exception.EmailException
 import com.onimus.blablasocialmedia.mvvm.utils.HandleErrors
-import io.reactivex.Completable
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 
@@ -28,10 +25,9 @@ class ResetViewModel(
     private val repository: UserRepository,
     private val processScheduler: Scheduler = Schedulers.io(),
     private val observerScheduler: Scheduler = AndroidSchedulers.mainThread()
-) : ProgressViewModel() {
+) : AuthenticationViewModel() {
 
     var email: String? = null
-    var password: String? = null
     var resetListener: ResetListener? = null
 
     private val handleErrors = HandleErrors()
@@ -43,39 +39,12 @@ class ResetViewModel(
      * button handler
      */
     fun onClickButtonReset() {
-        setActionToResetButton()
-    }
-
-    /**
-     * Action for buttons
-     */
-    private fun setActionToResetButton() {
         resetListener?.resetTextInputLayout()
 
-        resetListener?.showProgress()
-        //calling repository to perform the actual authentication
-        disposables.add(getDisposable(repository.resetPassword(email)))
-    }
-
-    private fun getDisposable(completable: Completable): Disposable {
-        return completable
-            .subscribeOn(processScheduler)
+        val completable = repository.resetPassword(email).subscribeOn(processScheduler)
             .observeOn(observerScheduler)
-            .subscribe({
-                resetListener?.hideProgress()
-                resetListener?.onSuccessAuth()
-            }, {
-
-                resetListener?.hideProgress()
-                val error = handleErrors.getMessageError(it)
-
-                when (it) {
-                    //Show message in text input
-                    is EmailException -> resetListener?.inEmailValidationError(error)
-                    //Show message
-                    else -> resetListener?.onFailureAuth(error)
-                }
-            })
+        val disposable = actionToAuthentication(completable, resetListener!!, handleErrors)
+        disposables.add(disposable)
     }
 
     override fun onCleared() {

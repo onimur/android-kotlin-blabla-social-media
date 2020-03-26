@@ -12,12 +12,6 @@
 
 package com.onimus.blablasocialmedia.mvvm.ui.resetpass.reset
 
-interface ResetListener {
-    fun onSuccessAuth()
-    fun onFailureAuth(resId: Int)
-    fun inEmailValidationError(resId: Int)
-    //
-    fun showProgress()
-    fun hideProgress()
-    fun resetTextInputLayout()
-}
+import com.onimus.blablasocialmedia.mvvm.common.AuthenticationListener
+
+interface ResetListener : AuthenticationListener

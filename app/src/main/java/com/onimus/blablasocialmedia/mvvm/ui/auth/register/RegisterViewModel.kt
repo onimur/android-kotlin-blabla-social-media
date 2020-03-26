@@ -12,16 +12,12 @@
 
 package com.onimus.blablasocialmedia.mvvm.ui.auth.register
 
-import com.onimus.blablasocialmedia.mvvm.common.ProgressViewModel
+import com.onimus.blablasocialmedia.mvvm.common.AuthenticationViewModel
 import com.onimus.blablasocialmedia.mvvm.data.repository.UserRepository
-import com.onimus.blablasocialmedia.mvvm.exception.EmailException
-import com.onimus.blablasocialmedia.mvvm.exception.PasswordException
 import com.onimus.blablasocialmedia.mvvm.utils.HandleErrors
-import io.reactivex.Completable
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 
@@ -29,7 +25,7 @@ class RegisterViewModel(
     private val repository: UserRepository,
     private val processScheduler: Scheduler = Schedulers.io(),
     private val observerScheduler: Scheduler = AndroidSchedulers.mainThread()
-) : ProgressViewModel() {
+) : AuthenticationViewModel() {
 
     var email: String? = null
     var password: String? = null
@@ -44,47 +40,17 @@ class RegisterViewModel(
      * button handler
      */
     fun onClickButtonRegister() {
-        setActionToAuthenticationButton()
+        registerListener?.resetTextInputLayout()
+
+        val completable = repository.registerUser(email, password).subscribeOn(processScheduler)
+            .observeOn(observerScheduler)
+        val disposable = actionToAuthentication(completable, registerListener!!, handleErrors)
+        disposables.add(disposable)
     }
 
     fun onClickTextViewLogin() {
         //go to fragment_login
         registerListener?.onNavigate()
-    }
-
-    /**
-     * Action for buttons
-     */
-    private fun setActionToAuthenticationButton() {
-        registerListener?.resetTextInputLayout()
-
-        registerListener?.showProgress()
-        //calling repository to perform the actual authentication
-        disposables.add(getDisposable(repository.registerUser(email, password)))
-    }
-
-    private fun getDisposable(completable: Completable): Disposable {
-        return completable
-            .subscribeOn(processScheduler)
-            .observeOn(observerScheduler)
-            .subscribe({
-                registerListener?.hideProgress()
-                registerListener?.onSuccessAuth()
-            }, {
-
-                registerListener?.hideProgress()
-
-                val error = handleErrors.getMessageError(it)
-
-                when (it) {
-                    //Show message in text input
-                    is EmailException -> registerListener?.inEmailValidationError(error)
-                    //Show message in text input
-                    is PasswordException -> registerListener?.inPasswordValidationError(error)
-                    //show message
-                    else -> registerListener?.onFailureAuth(error)
-                }
-            })
     }
 
     override fun onCleared() {

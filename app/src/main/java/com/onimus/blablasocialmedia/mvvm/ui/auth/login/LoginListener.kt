@@ -12,9 +12,9 @@
 
 package com.onimus.blablasocialmedia.mvvm.ui.auth.login
 
-import com.onimus.blablasocialmedia.mvvm.common.CommonListener
+import com.onimus.blablasocialmedia.mvvm.common.AuthenticationListener
 
-interface LoginListener : CommonListener {
+interface LoginListener : AuthenticationListener {
     fun onClickTextViewRegister() {}
     fun onClickTextViewForgotPassword() {}
     fun onSuccessGoogleSign()

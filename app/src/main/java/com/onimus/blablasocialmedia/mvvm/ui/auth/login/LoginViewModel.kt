@@ -16,10 +16,8 @@ package com.onimus.blablasocialmedia.mvvm.ui.auth.login
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthCredential
-import com.onimus.blablasocialmedia.mvvm.common.CommonViewModel
+import com.onimus.blablasocialmedia.mvvm.common.AuthenticationViewModel
 import com.onimus.blablasocialmedia.mvvm.data.repository.UserRepository
-import com.onimus.blablasocialmedia.mvvm.exception.EmailException
-import com.onimus.blablasocialmedia.mvvm.exception.PasswordException
 import com.onimus.blablasocialmedia.mvvm.utils.HandleErrors
 import io.reactivex.Completable
 import io.reactivex.Scheduler
@@ -33,7 +31,7 @@ class LoginViewModel(
     private val repository: UserRepository,
     private val processScheduler: Scheduler = Schedulers.io(),
     private val observerScheduler: Scheduler = AndroidSchedulers.mainThread()
-) : CommonViewModel() {
+) : AuthenticationViewModel() {
 
     var email: String? = null
     var password: String? = null

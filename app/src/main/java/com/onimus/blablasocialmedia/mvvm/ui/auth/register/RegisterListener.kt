@@ -12,14 +12,8 @@
 
 package com.onimus.blablasocialmedia.mvvm.ui.auth.register
 
-interface RegisterListener {
-    fun onSuccessAuth()
-    fun onFailureAuth(resId: Int)
+import com.onimus.blablasocialmedia.mvvm.common.AuthenticationListener
+
+interface RegisterListener: AuthenticationListener {
     fun onNavigate() {}
-    fun inEmailValidationError(resId: Int)
-    fun inPasswordValidationError(resId: Int) {}
-    //
-    fun showProgress()
-    fun hideProgress()
-    fun resetTextInputLayout()
 }

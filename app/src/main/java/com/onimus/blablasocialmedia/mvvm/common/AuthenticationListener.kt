@@ -12,7 +12,7 @@
 
 package com.onimus.blablasocialmedia.mvvm.common
 
-interface CommonListener {
+interface AuthenticationListener {
     fun onSuccessAuth()
     fun onFailureAuth(resId: Int)
     fun inEmailValidationError(resId: Int)

@@ -18,9 +18,9 @@ import com.onimus.blablasocialmedia.mvvm.utils.HandleErrors
 import io.reactivex.Completable
 import io.reactivex.disposables.Disposable
 
-abstract class CommonViewModel : ProgressViewModel() {
+abstract class AuthenticationViewModel : ProgressViewModel() {
 
-    protected fun <T : CommonListener> actionToAuthentication(
+    protected fun <T : AuthenticationListener> actionToAuthentication(
         completable: Completable,
         listener: T,
         handleErrors: HandleErrors
