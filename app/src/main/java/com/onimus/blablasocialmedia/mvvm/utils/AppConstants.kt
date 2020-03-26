@@ -19,11 +19,9 @@ object AppConstants {
         const val LOG_D = "Onimus/check"
     }
 
-    const val VALID = -1
-
     const val RC_SIGN_IN = 100
 
-    object ErrorFirebaseAuth {
+    object ErrorCodeFirebaseAuth {
         const val ERROR_EMAIL_ALREADY_IN_USE = "ERROR_EMAIL_ALREADY_IN_USE"
         const val ERROR_INVALID_EMAIL = "ERROR_INVALID_EMAIL"
         const val ERROR_WEAK_PASSWORD = "ERROR_WEAK_PASSWORD"
@@ -41,6 +39,13 @@ object AppConstants {
         const val ERROR_USER_NOT_FOUND = "ERROR_USER_NOT_FOUND"
         const val ERROR_INVALID_USER_TOKEN = "ERROR_INVALID_USER_TOKEN"
         const val ERROR_OPERATION_NOT_ALLOWED = "ERROR_OPERATION_NOT_ALLOWED"
+    }
+
+    object ErrorEmailAndPassword {
+        const val NULL_OR_BLANK_EMAIL = 3550
+        const val INVALID_EMAIL = 3551
+        const val NULL_OR_BLANK_PASSWORD = 3552
+        const val INVALID_PASSWORD = 3553
     }
 
     object Pattern {
