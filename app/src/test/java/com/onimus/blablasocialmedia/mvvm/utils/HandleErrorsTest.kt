@@ -12,19 +12,44 @@
 
 package com.onimus.blablasocialmedia.mvvm.utils
 
-import com.google.firebase.auth.*
-import com.onimus.blablasocialmedia.R
-import org.hamcrest.core.Is.`is`
-import org.junit.Assert.assertThat
+
+import com.onimus.blablasocialmedia.mvvm.exception.*
+import com.onimus.blablasocialmedia.mvvm.helper.TestConstants.*
+import com.onimus.blablasocialmedia.mvvm.helper.TestConstants.Companion.EMAIL_BLANK
+import com.onimus.blablasocialmedia.mvvm.helper.TestConstants.Companion.EMAIL_EMPTY
+import com.onimus.blablasocialmedia.mvvm.helper.TestConstants.Companion.EMAIL_INVALID
+import com.onimus.blablasocialmedia.mvvm.helper.TestConstants.Companion.EMAIL_INVALID2
+import com.onimus.blablasocialmedia.mvvm.helper.TestConstants.Companion.EMAIL_INVALID3
+import com.onimus.blablasocialmedia.mvvm.helper.TestConstants.Companion.PASSWORD_BLANK
+import com.onimus.blablasocialmedia.mvvm.helper.TestConstants.Companion.PASSWORD_EMPTY
+import com.onimus.blablasocialmedia.mvvm.helper.TestConstants.Companion.PASSWORD_INVALID
+import com.onimus.blablasocialmedia.mvvm.helper.TestConstants.Companion.PASSWORD_INVALID2
+import com.onimus.blablasocialmedia.mvvm.helper.TestConstants.Companion.PASSWORD_INVALID3
+import com.onimus.blablasocialmedia.mvvm.helper.TestConstants.Companion.PASSWORD_INVALID4
+import com.onimus.blablasocialmedia.mvvm.helper.TestConstants.Companion.PASSWORD_INVALID5
+import org.assertj.core.api.Assertions.*
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.core.IsEqual
+
 import org.junit.Before
 import org.junit.Test
-import org.mockito.ArgumentMatchers.anyString
+import java.lang.AssertionError
+import java.util.function.Predicate
+import java.util.function.Predicate.isEqual
+
 
 class HandleErrorsTest {
 
     companion object {
-        const val CORRECT_EMAIL = "mur@gmail.com"
-        const val CORRECT_PASSWORD = "Abc123"
+        const val NULL_OR_BLANK_EMAIL = 3550
+        const val INVALID_EMAIL = 3551
+        const val NULL_OR_BLANK_PASSWORD = 3552
+        const val INVALID_PASSWORD = 3553
+
+        private const val MESSAGE_NULL_OR_BLANK_EMAIL = "null or blank email"
+        private const val MESSAGE_NULL_OR_BLANK_PASSWORD = "null or blank password"
+        private const val MESSAGE_INVALID_EMAIL = "invalid email"
+        private const val MESSAGE_INVALID_PASSWORD = "invalid password"
     }
 
     private lateinit var handleErrors: HandleErrors
@@ -35,51 +60,108 @@ class HandleErrorsTest {
     }
 
     @Test
-    fun `checkEmail with empty or blank should return error`() {
-        assertThat(handleErrors.checkEmail(null), `is`(R.string.field_empty))
-        assertThat(handleErrors.checkEmail("  "), `is`(R.string.field_empty))
-    }
+    fun `filterEmail with null, empty or blank email should return NullOrBlankEmailException`() {
 
-    @Test
-    fun `checkPassword with empty or blank should return error`() {
-        assertThat(handleErrors.checkPassword(null), `is`(R.string.field_empty))
-        assertThat(handleErrors.checkPassword("  "), `is`(R.string.field_empty))
-    }
+        assertThatExceptionOfType(Exception::class.java)
+            .isThrownBy { handleErrors.filterEmail(null) }
+            .withMessageContaining(MESSAGE_NULL_OR_BLANK_EMAIL)
+            .isNotInstanceOf(PasswordException::class.java)
+            .isInstanceOf(NullOrBlankEmailException::class.java)
 
-    @Test
-    fun `checkEmail with invalid format should return error`() {
-        assertThat(
-            handleErrors.checkEmail("2s2s2sd2r2.com"),
-            `is`(R.string.error_invalid_email_format)
-        )
-        assertThat(
-            handleErrors.checkEmail("s2s @!dsq%@.gmail.com"),
-            `is`(R.string.error_invalid_email_format)
-        )
+        assertThatExceptionOfType(Exception::class.java)
+            .isThrownBy { handleErrors.filterEmail(EMAIL_EMPTY) }
+            .withMessageContaining(MESSAGE_NULL_OR_BLANK_EMAIL)
+            .isNotInstanceOf(PasswordException::class.java)
+            .isInstanceOf(NullOrBlankEmailException::class.java)
+
+        assertThatExceptionOfType(Exception::class.java)
+            .isThrownBy { handleErrors.filterEmail(EMAIL_BLANK) }
+            .withMessageContaining(MESSAGE_NULL_OR_BLANK_EMAIL)
+            .isNotInstanceOf(PasswordException::class.java)
+            .isInstanceOf(NullOrBlankEmailException::class.java)
 
     }
 
     @Test
-    fun `checkPassword with invalid format should return error`() {
-        val error = R.string.error_password_weak
+    fun `filterPassword with null, empty or blank password should return NullOrBlankPasswordException`() {
+        assertThatExceptionOfType(Exception::class.java)
+            .isThrownBy { handleErrors.filterPassword(null) }
+            .withMessageContaining(MESSAGE_NULL_OR_BLANK_PASSWORD)
+            .isNotInstanceOf(EmailException::class.java)
+            .isInstanceOf(NullOrBlankPasswordException::class.java)
 
+        assertThatExceptionOfType(Exception::class.java)
+            .isThrownBy { handleErrors.filterPassword(PASSWORD_EMPTY) }
+            .withMessageContaining(MESSAGE_NULL_OR_BLANK_PASSWORD)
+            .isNotInstanceOf(EmailException::class.java)
+            .isInstanceOf(NullOrBlankPasswordException::class.java)
+
+        assertThatExceptionOfType(Exception::class.java)
+            .isThrownBy { handleErrors.filterPassword(PASSWORD_BLANK) }
+            .withMessageContaining(MESSAGE_NULL_OR_BLANK_PASSWORD)
+            .isNotInstanceOf(EmailException::class.java)
+            .isInstanceOf(NullOrBlankPasswordException::class.java)
+    }
+
+    @Test
+    fun `filterEmail with invalid format should return InvalidEmailException`() {
+        assertThatExceptionOfType(Exception::class.java)
+            .isThrownBy { handleErrors.filterEmail(EMAIL_INVALID) }
+            .withMessageContaining(MESSAGE_INVALID_EMAIL)
+            .isNotInstanceOf(PasswordException::class.java)
+            .isInstanceOf(InvalidEmailException::class.java)
+
+        assertThatExceptionOfType(Exception::class.java)
+            .isThrownBy { handleErrors.filterEmail(EMAIL_INVALID2) }
+            .withMessageContaining(MESSAGE_INVALID_EMAIL)
+            .isNotInstanceOf(PasswordException::class.java)
+            .isInstanceOf(InvalidEmailException::class.java)
+
+        assertThatExceptionOfType(Exception::class.java)
+            .isThrownBy { handleErrors.filterEmail(EMAIL_INVALID3) }
+            .withMessageContaining(MESSAGE_INVALID_EMAIL)
+            .isNotInstanceOf(PasswordException::class.java)
+            .isInstanceOf(InvalidEmailException::class.java)
+    }
+
+    @Test
+    fun `filterPassword with invalid format should return InvalidPasswordException`() {
         //without 1 character uppercase
-        assertThat(handleErrors.checkPassword("abc123"), `is`(error))
+        assertThatExceptionOfType(Exception::class.java)
+            .isThrownBy { handleErrors.filterPassword(PASSWORD_INVALID) }
+            .withMessageContaining(MESSAGE_INVALID_PASSWORD)
+            .isNotInstanceOf(EmailException::class.java)
+            .isInstanceOf(InvalidPasswordException::class.java)
         //without 1 numeric character
-        assertThat(handleErrors.checkPassword("abcdef"), `is`(error))
+        assertThatExceptionOfType(Exception::class.java)
+            .isThrownBy { handleErrors.filterPassword(PASSWORD_INVALID2) }
+            .withMessageContaining(MESSAGE_INVALID_PASSWORD)
+            .isNotInstanceOf(EmailException::class.java)
+            .isInstanceOf(InvalidPasswordException::class.java)
         //without alphabetic characters
-        assertThat(handleErrors.checkPassword("123456"), `is`(error))
+        assertThatExceptionOfType(Exception::class.java)
+            .isThrownBy { handleErrors.filterPassword(PASSWORD_INVALID3) }
+            .withMessageContaining(MESSAGE_INVALID_PASSWORD)
+            .isNotInstanceOf(EmailException::class.java)
+            .isInstanceOf(InvalidPasswordException::class.java)
         //without alphanumeric characters
-        assertThat(handleErrors.checkPassword("$%#@!&"), `is`(error))
+        assertThatExceptionOfType(Exception::class.java)
+            .isThrownBy { handleErrors.filterPassword(PASSWORD_INVALID4) }
+            .withMessageContaining(MESSAGE_INVALID_PASSWORD)
+            .isNotInstanceOf(EmailException::class.java)
+            .isInstanceOf(InvalidPasswordException::class.java)
         //with less than 6 characters
-        assertThat(handleErrors.checkPassword("Abc12"), `is`(error))
-
+        assertThatExceptionOfType(Exception::class.java)
+            .isThrownBy { handleErrors.filterPassword(PASSWORD_INVALID5) }
+            .withMessageContaining(MESSAGE_INVALID_PASSWORD)
+            .isNotInstanceOf(EmailException::class.java)
+            .isInstanceOf(InvalidPasswordException::class.java)
     }
-
+/*
     @Test
     fun `checkEmail and checkPassword with valid format should return -1`() {
-        assertThat(handleErrors.checkEmail(CORRECT_EMAIL), `is`(-1))
-        assertThat(handleErrors.checkPassword(CORRECT_PASSWORD), `is`(-1))
+        assertThat(handleErrors.filterEmail(CORRECT_EMAIL), `is`(-1))
+        assertThat(handleErrors.filterPassword(CORRECT_PASSWORD), `is`(-1))
     }
     /////////////////////////////////////////////////////////////////////////////
 
@@ -88,7 +170,7 @@ class HandleErrorsTest {
         assertThat(
             handleErrors.getMessageError(
                 FirebaseAuthEmailException(
-                    AppConstants.ErrorFirebaseAuth.ERROR_EMAIL_ALREADY_IN_USE,
+                    AppConstants.ErrorCodeFirebaseAuth.ERROR_EMAIL_ALREADY_IN_USE,
                     ""
                 )
             ), `is`(R.string.error_email_already_use)
@@ -96,7 +178,7 @@ class HandleErrorsTest {
         assertThat(
             handleErrors.getMessageError(
                 FirebaseAuthActionCodeException(
-                    AppConstants.ErrorFirebaseAuth.ERROR_INVALID_EMAIL,
+                    AppConstants.ErrorCodeFirebaseAuth.ERROR_INVALID_EMAIL,
                     ""
                 )
             ), `is`(R.string.error_invalid_email_format)
@@ -104,7 +186,7 @@ class HandleErrorsTest {
         assertThat(
             handleErrors.getMessageError(
                 FirebaseAuthEmailException(
-                    AppConstants.ErrorFirebaseAuth.ERROR_WEAK_PASSWORD,
+                    AppConstants.ErrorCodeFirebaseAuth.ERROR_WEAK_PASSWORD,
                     ""
                 )
             ), `is`(R.string.error_password_weak)
@@ -112,7 +194,7 @@ class HandleErrorsTest {
         assertThat(
             handleErrors.getMessageError(
                 FirebaseAuthInvalidCredentialsException(
-                    AppConstants.ErrorFirebaseAuth.ERROR_CREDENTIAL_ALREADY_IN_USE,
+                    AppConstants.ErrorCodeFirebaseAuth.ERROR_CREDENTIAL_ALREADY_IN_USE,
                     ""
                 )
             ), `is`(R.string.error_credentials_already_use)
@@ -120,7 +202,7 @@ class HandleErrorsTest {
         assertThat(
             handleErrors.getMessageError(
                 FirebaseAuthRecentLoginRequiredException(
-                    AppConstants.ErrorFirebaseAuth.ERROR_INVALID_CUSTOM_TOKEN,
+                    AppConstants.ErrorCodeFirebaseAuth.ERROR_INVALID_CUSTOM_TOKEN,
                     ""
                 )
             ), `is`(R.string.error_invalid_custom_token)
@@ -128,7 +210,7 @@ class HandleErrorsTest {
         assertThat(
             handleErrors.getMessageError(
                 FirebaseAuthWebException(
-                    AppConstants.ErrorFirebaseAuth.ERROR_CUSTOM_TOKEN_MISMATCH,
+                    AppConstants.ErrorCodeFirebaseAuth.ERROR_CUSTOM_TOKEN_MISMATCH,
                     ""
                 )
             ), `is`(R.string.error_custom_token_mismatch)
@@ -136,7 +218,7 @@ class HandleErrorsTest {
         assertThat(
             handleErrors.getMessageError(
                 FirebaseAuthException(
-                    AppConstants.ErrorFirebaseAuth.ERROR_INVALID_CREDENTIAL,
+                    AppConstants.ErrorCodeFirebaseAuth.ERROR_INVALID_CREDENTIAL,
                     ""
                 )
             ), `is`(R.string.error_invalid_credential)
@@ -144,7 +226,7 @@ class HandleErrorsTest {
         assertThat(
             handleErrors.getMessageError(
                 FirebaseAuthException(
-                    AppConstants.ErrorFirebaseAuth.ERROR_WRONG_PASSWORD,
+                    AppConstants.ErrorCodeFirebaseAuth.ERROR_WRONG_PASSWORD,
                     ""
                 )
             ), `is`(R.string.error_wrong_password)
@@ -152,7 +234,7 @@ class HandleErrorsTest {
         assertThat(
             handleErrors.getMessageError(
                 FirebaseAuthException(
-                    AppConstants.ErrorFirebaseAuth.ERROR_USER_MISMATCH,
+                    AppConstants.ErrorCodeFirebaseAuth.ERROR_USER_MISMATCH,
                     ""
                 )
             ), `is`(R.string.error_user_mismatch)
@@ -160,7 +242,7 @@ class HandleErrorsTest {
         assertThat(
             handleErrors.getMessageError(
                 FirebaseAuthException(
-                    AppConstants.ErrorFirebaseAuth.ERROR_REQUIRES_RECENT_LOGIN,
+                    AppConstants.ErrorCodeFirebaseAuth.ERROR_REQUIRES_RECENT_LOGIN,
                     ""
                 )
             ), `is`(R.string.error_requires_recent_login)
@@ -168,7 +250,7 @@ class HandleErrorsTest {
         assertThat(
             handleErrors.getMessageError(
                 FirebaseAuthException(
-                    AppConstants.ErrorFirebaseAuth.ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL,
+                    AppConstants.ErrorCodeFirebaseAuth.ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL,
                     ""
                 )
             ), `is`(R.string.error_account_exists_with_different_credential)
@@ -176,7 +258,7 @@ class HandleErrorsTest {
         assertThat(
             handleErrors.getMessageError(
                 FirebaseAuthException(
-                    AppConstants.ErrorFirebaseAuth.ERROR_USER_DISABLED,
+                    AppConstants.ErrorCodeFirebaseAuth.ERROR_USER_DISABLED,
                     ""
                 )
             ), `is`(R.string.error_user_disabled)
@@ -184,7 +266,7 @@ class HandleErrorsTest {
         assertThat(
             handleErrors.getMessageError(
                 FirebaseAuthException(
-                    AppConstants.ErrorFirebaseAuth.ERROR_USER_TOKEN_EXPIRED,
+                    AppConstants.ErrorCodeFirebaseAuth.ERROR_USER_TOKEN_EXPIRED,
                     ""
                 )
             ), `is`(R.string.error_user_token_expired)
@@ -192,7 +274,7 @@ class HandleErrorsTest {
         assertThat(
             handleErrors.getMessageError(
                 FirebaseAuthException(
-                    AppConstants.ErrorFirebaseAuth.ERROR_USER_NOT_FOUND,
+                    AppConstants.ErrorCodeFirebaseAuth.ERROR_USER_NOT_FOUND,
                     ""
                 )
             ), `is`(R.string.error_user_not_found)
@@ -200,7 +282,7 @@ class HandleErrorsTest {
         assertThat(
             handleErrors.getMessageError(
                 FirebaseAuthException(
-                    AppConstants.ErrorFirebaseAuth.ERROR_INVALID_USER_TOKEN,
+                    AppConstants.ErrorCodeFirebaseAuth.ERROR_INVALID_USER_TOKEN,
                     ""
                 )
             ), `is`(R.string.error_invalid_user_token)
@@ -208,7 +290,7 @@ class HandleErrorsTest {
         assertThat(
             handleErrors.getMessageError(
                 FirebaseAuthException(
-                    AppConstants.ErrorFirebaseAuth.ERROR_OPERATION_NOT_ALLOWED,
+                    AppConstants.ErrorCodeFirebaseAuth.ERROR_OPERATION_NOT_ALLOWED,
                     ""
                 )
             ), `is`(R.string.error_operation_not_allowed)
@@ -230,4 +312,7 @@ class HandleErrorsTest {
             `is`(R.string.error_unknown)
         )
     }
+
+ */
 }
+
