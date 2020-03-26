@@ -43,7 +43,7 @@ class ResetViewModel(
 
         val completable = repository.resetPassword(email).subscribeOn(processScheduler)
             .observeOn(observerScheduler)
-        val disposable = actionToAuthentication(completable, resetListener!!, handleErrors)
+        val disposable = disposableToAuthentication(completable, resetListener!!, handleErrors)
         disposables.add(disposable)
     }
 

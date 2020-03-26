@@ -19,8 +19,14 @@ import io.reactivex.Completable
 import io.reactivex.disposables.Disposable
 
 abstract class AuthenticationViewModel : ProgressViewModel() {
-
-    protected fun <T : AuthenticationListener> actionToAuthentication(
+    /**
+     * Common method for all ViewModels that require user authentication
+     * @param completable: you need subscribeOn and observeOn
+     * @param listener: Any listener that extends the AuthenticationListener
+     * @param handleErrors: method responsible for handling errors
+     * @return Disposable already complete for use
+     */
+    protected fun <T : AuthenticationListener> disposableToAuthentication(
         completable: Completable,
         listener: T,
         handleErrors: HandleErrors

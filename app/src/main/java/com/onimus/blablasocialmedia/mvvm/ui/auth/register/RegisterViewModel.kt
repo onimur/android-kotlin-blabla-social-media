@@ -44,7 +44,7 @@ class RegisterViewModel(
 
         val completable = repository.registerUser(email, password).subscribeOn(processScheduler)
             .observeOn(observerScheduler)
-        val disposable = actionToAuthentication(completable, registerListener!!, handleErrors)
+        val disposable = disposableToAuthentication(completable, registerListener!!, handleErrors)
         disposables.add(disposable)
     }
 

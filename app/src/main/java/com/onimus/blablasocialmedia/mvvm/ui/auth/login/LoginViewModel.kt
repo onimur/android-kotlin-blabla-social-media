@@ -50,7 +50,7 @@ class LoginViewModel(
 
         val completable = repository.logInUser(email, password).subscribeOn(processScheduler)
             .observeOn(observerScheduler)
-        val disposable = actionToAuthentication(completable, loginListener!!, handleErrors)
+        val disposable = disposableToAuthentication(completable, loginListener!!, handleErrors)
         disposables.add(disposable)
     }
 
@@ -63,7 +63,7 @@ class LoginViewModel(
         //calling repository to perform the actual authentication
         val completable = repository.logInUser(credential).subscribeOn(processScheduler)
             .observeOn(observerScheduler)
-        val disposable = actionToAuthentication(completable, loginListener!!, handleErrors)
+        val disposable = disposableToAuthentication(completable, loginListener!!, handleErrors)
         disposables.add(disposable)
 
     }
