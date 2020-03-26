@@ -12,17 +12,10 @@
 
 package com.onimus.blablasocialmedia.mvvm.ui.auth.login
 
-interface LoginListener {
-    fun onSuccessAuth()
-    fun onFailureAuth(resId: Int)
-    fun onSuccessGoogleSign()
+import com.onimus.blablasocialmedia.mvvm.common.CommonListener
+
+interface LoginListener : CommonListener {
     fun onClickTextViewRegister() {}
     fun onClickTextViewForgotPassword() {}
-    fun inEmailValidationError(resId: Int)
-    fun inPasswordValidationError(resId: Int) {}
-
-    //
-    fun showProgress()
-    fun hideProgress()
-    fun resetTextInputLayout()
+    fun onSuccessGoogleSign()
 }
