@@ -14,7 +14,8 @@ package com.onimus.blablasocialmedia.mvvm.ui.auth.register
 
 import com.onimus.blablasocialmedia.mvvm.common.ProgressViewModel
 import com.onimus.blablasocialmedia.mvvm.data.repository.UserRepository
-import com.onimus.blablasocialmedia.mvvm.exception.*
+import com.onimus.blablasocialmedia.mvvm.exception.EmailException
+import com.onimus.blablasocialmedia.mvvm.exception.PasswordException
 import com.onimus.blablasocialmedia.mvvm.utils.HandleErrors
 import io.reactivex.Completable
 import io.reactivex.Scheduler
@@ -59,9 +60,7 @@ class RegisterViewModel(
 
         registerListener?.showProgress()
         //calling repository to perform the actual authentication
-        val completable = repository.registerUser(email, password)
-        val disposable = getDisposable(completable)
-        disposables.add(disposable)
+        disposables.add(getDisposable(repository.registerUser(email, password)))
     }
 
     private fun getDisposable(completable: Completable): Disposable {
@@ -84,7 +83,6 @@ class RegisterViewModel(
                     is PasswordException -> registerListener?.inPasswordValidationError(error)
                     //show message
                     else -> registerListener?.onFailureAuth(error)
-
                 }
             })
     }

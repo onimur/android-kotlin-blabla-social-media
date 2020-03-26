@@ -14,7 +14,7 @@ package com.onimus.blablasocialmedia.mvvm.ui.resetpass.reset
 
 import com.onimus.blablasocialmedia.mvvm.common.ProgressViewModel
 import com.onimus.blablasocialmedia.mvvm.data.repository.UserRepository
-import com.onimus.blablasocialmedia.mvvm.utils.AppConstants
+import com.onimus.blablasocialmedia.mvvm.exception.EmailException
 import com.onimus.blablasocialmedia.mvvm.utils.HandleErrors
 import io.reactivex.Completable
 import io.reactivex.Scheduler
@@ -51,20 +51,10 @@ class ResetViewModel(
      */
     private fun setActionToResetButton() {
         resetListener?.resetTextInputLayout()
-        //validate email and password
 
-        //email is valid
-        when (val checkEmail = handleErrors.checkEmail(email)) {
-            AppConstants.VALID -> {
-                resetListener?.resetTextInputLayout()
-                //if is valid then show progress
-                resetListener?.showProgress()
-                //calling repository to perform the actual authentication
-                val disposable = getDisposable(repository.resetPassword(email!!))
-                disposables.add(disposable)
-            }
-            else -> resetListener?.inEmailValidationError(checkEmail)
-        }
+        resetListener?.showProgress()
+        //calling repository to perform the actual authentication
+        disposables.add(getDisposable(repository.resetPassword(email)))
     }
 
     private fun getDisposable(completable: Completable): Disposable {
@@ -78,8 +68,13 @@ class ResetViewModel(
 
                 resetListener?.hideProgress()
                 val error = handleErrors.getMessageError(it)
-                //show message
-                resetListener?.onFailureAuth(error)
+
+                when (it) {
+                    //Show message in text input
+                    is EmailException -> resetListener?.inEmailValidationError(error)
+                    //Show message
+                    else -> resetListener?.onFailureAuth(error)
+                }
             })
     }
 
