@@ -12,10 +12,12 @@
 
 package com.onimus.blablasocialmedia.mvvm.exception
 
+import com.google.android.gms.common.internal.Preconditions
+
 /**
  * Classes for handling exceptions with email and password
  */
-open class InvalidEmailAndPasswordException(message: String, private val errorCode: Int) :
+open class InvalidEmailAndPasswordException(message: String, error: Int) :
     RuntimeException(message) {
     protected companion object {
         const val NULL_OR_BLANK_EMAIL = 3550
@@ -23,8 +25,7 @@ open class InvalidEmailAndPasswordException(message: String, private val errorCo
         const val NULL_OR_BLANK_PASSWORD = 3552
         const val INVALID_PASSWORD = 3553
     }
-
-    fun getErrorCode() = errorCode
+    val errorCode:Int = Preconditions.checkNotZero(error)
 }
 
 open class EmailException(message: String, errorCode: Int) :
