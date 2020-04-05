@@ -151,7 +151,7 @@ class RegisterModelIT {
 
         slotFailureListener.captured.onFailure(
             FirebaseAuthWeakPasswordException(
-                AppConstants.ErrorFirebaseAuth.ERROR_REQUIRES_RECENT_LOGIN,
+                AppConstants.ErrorCodeFirebaseAuth.ERROR_REQUIRES_RECENT_LOGIN,
                 "test2",
                 "test3"
             )

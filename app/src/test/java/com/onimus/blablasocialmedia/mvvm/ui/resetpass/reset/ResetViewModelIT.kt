@@ -79,24 +79,9 @@ class ResetViewModelIT {
             ResetViewModel(mockUserRepository, Schedulers.trampoline(), Schedulers.trampoline())
         resetViewModel.resetListener = mockResetListener
         resetViewModel.email = CORRECT_EMAIL
-        resetViewModel.password = CORRECT_PASSWORD
     }
 
     private fun setupTasks() {
-        every {
-            mockAuth.createUserWithEmailAndPassword(
-                CORRECT_EMAIL,
-                CORRECT_PASSWORD
-            )
-        } returns mockAuthTask
-
-        every {
-            mockAuth.signInWithEmailAndPassword(
-                CORRECT_EMAIL,
-                CORRECT_PASSWORD
-            )
-        } returns mockAuthTask
-
         every {
             mockAuth.sendPasswordResetEmail(
                 CORRECT_EMAIL
@@ -143,7 +128,7 @@ class ResetViewModelIT {
 
         slotFailureListenerReset.captured.onFailure(
             FirebaseAuthInvalidCredentialsException(
-                AppConstants.ErrorFirebaseAuth.ERROR_USER_NOT_FOUND,
+                AppConstants.ErrorCodeFirebaseAuth.ERROR_USER_NOT_FOUND,
                 "test2"
             )
         )
