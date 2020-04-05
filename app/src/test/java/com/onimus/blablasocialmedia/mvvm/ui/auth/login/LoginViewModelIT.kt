@@ -145,7 +145,7 @@ class LoginViewModelIT {
                 eq(CORRECT_PASSWORD)
             )
         }
-        verify(exactly = 2) { mockLoginListener.resetTextInputLayout() }
+        verify(exactly = 1) { mockLoginListener.resetTextInputLayout() }
         verify(exactly = 1) { mockLoginListener.showProgress() }
         verify(exactly = 1) { mockLoginListener.hideProgress() }
         verify(exactly = 1) { mockLoginListener.onSuccessAuth() }

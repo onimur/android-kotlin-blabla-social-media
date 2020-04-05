@@ -139,7 +139,7 @@ class RegisterModelIT {
                 eq(CORRECT_PASSWORD)
             )
         }
-        verify(exactly = 2) { mockRegisterListener.resetTextInputLayout() }
+        verify(exactly = 1) { mockRegisterListener.resetTextInputLayout() }
         verify(exactly = 1) { mockRegisterListener.showProgress() }
         verify(exactly = 1) { mockRegisterListener.hideProgress() }
         verify(exactly = 1) { mockRegisterListener.onSuccessAuth() }

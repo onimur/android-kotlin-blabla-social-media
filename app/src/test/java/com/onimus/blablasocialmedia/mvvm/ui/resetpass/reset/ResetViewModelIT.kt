@@ -116,7 +116,7 @@ class ResetViewModelIT {
                 eq(CORRECT_EMAIL)
             )
         }
-        verify(exactly = 2) { mockResetListener.resetTextInputLayout() }
+        verify(exactly = 1) { mockResetListener.resetTextInputLayout() }
         verify(exactly = 1) { mockResetListener.showProgress() }
         verify(exactly = 1) { mockResetListener.hideProgress() }
         verify(exactly = 1) { mockResetListener.onSuccessAuth() }
